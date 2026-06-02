@@ -1,0 +1,122 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model AdminUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  role      String   @default("ADMIN") // ADMIN, MANAGER, AGENT
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Client {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  phone     String?
+  company   String?
+  tier      String   @default("STANDARD") // STANDARD, CORPORATE, VIP
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  bookings  Booking[]
+}
+
+model Booking {
+  id          String   @id @default(cuid())
+  type        String   // FLIGHT, HOTEL, EXPEDITION
+  status      String   @default("PENDING") // PENDING, CONFIRMED, CANCELLED
+  amount      Float
+  currency    String   @default("USD")
+  clientId    String
+  client      Client   @relation(fields: [clientId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Ticket {
+  id             String   @id @default(cuid())
+  pnr            String   @unique
+  airline        String
+  passengerName  String
+  status         String   @default("PENDING") // ISSUED, PENDING, CANCELLED
+  gdsSyncStatus  String   @default("UNSYNCED") // SYNCED, UNSYNCED, ERROR
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model VisaApplication {
+  id              String   @id @default(cuid())
+  country         String
+  passportDetails String
+  status          String   @default("RECEIVED") // RECEIVED, PROCESSING, APPROVED, DELIVERED
+  applicantName   String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Campaign {
+  id            String   @id @default(cuid())
+  name          String
+  discountCode  String   @unique
+  isActive      Boolean  @default(true)
+  conversions   Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model BlogPost {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  content     String
+  image       String?
+  published   Boolean  @default(false)
+  authorName  String   @default("Tesfa Team")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Inquiry {
+  id        String   @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String
+  phone     String
+  service   String
+  message   String
+  status    String   @default("UNREAD") // UNREAD, READ, RESPONDED
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Package {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  price       String   // e.g., "From $300"
+  image       String   // e.g., "/assets/flight1.jpg"
+  status      String   @default("PUBLISHED") // DRAFT, PUBLISHED, FULL
+  capacity    Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Offer {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  price       String
+  image       String
+  isActive    Boolean  @default(true)
+  validUntil  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
