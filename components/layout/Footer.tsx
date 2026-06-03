@@ -2,6 +2,7 @@
 
 import { motion, useInView } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import React, { type FormEvent, useRef, useState, useEffect } from 'react';
 import { ShieldCheck, CreditCard, HeadphonesIcon, Facebook, Instagram, MessageCircle } from 'lucide-react';
 
@@ -80,7 +81,7 @@ export function Footer() {
           className="flex whitespace-nowrap"
         >
           {[...Array(6)].map((_, i) => (
-            <span key={i} className="text-[25vw] font-black tracking-tighter leading-none text-white/5 px-8" style={{ fontFamily: 'var(--font-sans)' }}>
+            <span key={i} className="text-[100vw] md:text-[25vw] font-black tracking-tighter leading-none text-white/5 px-8" style={{ fontFamily: 'var(--font-sans)' }}>
               TESFA TRAVELS 
             </span>
           ))}
@@ -88,9 +89,15 @@ export function Footer() {
       </div>
 
       <div className='container mx-auto px-6 relative z-10'>
-        <div className='md:flex justify-between items-start w-full gap-12'>
-          <div className="flex-1 max-w-2xl">
-            <h2 className='md:text-5xl text-4xl font-medium tracking-tight leading-tight mb-8' style={{ fontFamily: 'var(--font-sans)' }}>
+        <div className='flex flex-col md:flex-row justify-between items-start w-full gap-12'>
+          <div className="flex-1 w-full max-w-2xl">
+            <div className="flex items-center gap-5 mb-8">
+              <div className="h-20 aspect-square flex-shrink-0 overflow-hidden">
+                <img src="/assets/logo.png" alt="Tesfa Travels Logo" className="h-full w-full object-cover" />
+              </div>
+              <span className="text-white font-medium tracking-wide text-3xl" style={{ fontFamily: 'var(--font-serif)' }}>Tesfa Travels</span>
+            </div>
+            <h2 className='text-4xl sm:text-5xl font-medium tracking-tight leading-tight mb-8' style={{ fontFamily: 'var(--font-sans)' }}>
               Flying is our business,<br />
               <span className="font-light italic text-white/80" style={{ fontFamily: 'var(--font-serif)' }}>service is our asset.</span>
             </h2>

@@ -241,7 +241,7 @@ export default function ContentAndCampaignsAdmin() {
           <button 
             onClick={() => { setActiveTab('blog'); setIsFormOpen(false); }}
             className={`px-8 py-3 text-[10px] font-bold tracking-widest uppercase transition-all flex items-center gap-2 ${
-              activeTab === 'blog' ? 'bg-white text-[#111111] shadow-sm' : 'text-neutral-500 hover:text-[#111111]'
+              activeTab === 'blog' ? 'bg-[#6b7b65] text-white shadow-sm' : 'text-neutral-500 hover:text-[#111111] hover:bg-[#6b7b65]/10'
             }`}
           >
             <MessageCircle size={14} /> Blog Editor
@@ -249,7 +249,7 @@ export default function ContentAndCampaignsAdmin() {
           <button 
             onClick={() => { setActiveTab('campaigns'); setIsFormOpen(false); }}
             className={`px-8 py-3 text-[10px] font-bold tracking-widest uppercase transition-all flex items-center gap-2 ${
-              activeTab === 'campaigns' ? 'bg-white text-[#111111] shadow-sm' : 'text-neutral-500 hover:text-[#111111]'
+              activeTab === 'campaigns' ? 'bg-[#6b7b65] text-white shadow-sm' : 'text-neutral-500 hover:text-[#111111] hover:bg-[#6b7b65]/10'
             }`}
           >
             <Globe size={14} /> Campaigns
@@ -276,15 +276,15 @@ export default function ContentAndCampaignsAdmin() {
           </div>
 
           {isCampaignFormOpen && (
-            <div className="bg-white border border-neutral-200 shadow-2xl p-10 mb-12 relative">
-              <button onClick={() => setIsCampaignFormOpen(false)} className="absolute top-6 right-6 text-neutral-400 hover:text-black">
+            <div className="bg-[#6b7b65] border border-[#7a8a74] shadow-2xl p-10 mb-12 relative text-white">
+              <button onClick={() => setIsCampaignFormOpen(false)} className="absolute top-6 right-6 text-white/50 hover:text-white">
                 <Archive size={20} />
               </button>
-              <div className="mb-8 border-b border-neutral-100 pb-6">
-                 <h3 className="text-3xl font-bold text-[#111111] tracking-tighter" style={{ fontFamily: 'var(--font-serif)' }}>
+              <div className="mb-8 border-b border-white/10 pb-6">
+                 <h3 className="text-3xl font-bold text-white tracking-tighter" style={{ fontFamily: 'var(--font-serif)' }}>
                    {isCampaignEditing ? 'Edit Campaign' : 'Create Campaign'}
                  </h3>
-                 <p className="text-[10px] uppercase tracking-widest text-neutral-400 font-bold mt-2">Publish a marketing campaign banner.</p>
+                 <p className="text-[10px] uppercase tracking-widest text-white/70 font-bold mt-2">Publish a marketing campaign banner.</p>
               </div>
               
               <form onSubmit={handleCampaignSubmit} className="space-y-8">
@@ -337,14 +337,14 @@ export default function ContentAndCampaignsAdmin() {
           )}
 
           {/* List */}
-          <div className="bg-white border border-neutral-200 shadow-xl overflow-hidden">
-            <table className="w-full text-left">
+          <div className="bg-white border border-neutral-200 shadow-xl overflow-x-auto w-full">
+            <table className="w-full text-left min-w-[800px]">
               <thead>
-                <tr className="bg-neutral-50 border-b border-neutral-200">
-                  <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-500">Campaign</th>
-                  <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-500">Code / Expiry</th>
-                  <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-500">Status</th>
-                  <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-500 text-right">Actions</th>
+                <tr className="bg-[#6b7b65] border-b border-[#7a8a74]">
+                  <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-white/90">Campaign</th>
+                  <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-white/90">Code / Expiry</th>
+                  <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-white/90">Status</th>
+                  <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-white/90 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-neutral-100">
@@ -426,15 +426,15 @@ export default function ContentAndCampaignsAdmin() {
           </div>
 
           {isFormOpen && (
-            <div className="bg-white border border-neutral-200 shadow-2xl p-10 mb-12 relative">
-              <button onClick={() => setIsFormOpen(false)} className="absolute top-6 right-6 text-neutral-400 hover:text-black">
+            <div className="bg-[#6b7b65] border border-[#7a8a74] shadow-2xl p-10 mb-12 relative text-white">
+              <button onClick={() => setIsFormOpen(false)} className="absolute top-6 right-6 text-white/50 hover:text-white">
                 <Archive size={20} />
               </button>
-              <div className="mb-8 border-b border-neutral-100 pb-6">
-                 <h3 className="text-3xl font-bold text-[#111111] tracking-tighter" style={{ fontFamily: 'var(--font-serif)' }}>
+              <div className="mb-8 border-b border-white/10 pb-6">
+                 <h3 className="text-3xl font-bold text-white tracking-tighter" style={{ fontFamily: 'var(--font-serif)' }}>
                    {isEditing ? 'Edit Blog Post' : 'Write New Post'}
                  </h3>
-                 <p className="text-[10px] uppercase tracking-widest text-neutral-400 font-bold mt-2">Publish travel journals to the public site.</p>
+                 <p className="text-[10px] uppercase tracking-widest text-white/70 font-bold mt-2">Publish travel journals to the public site.</p>
               </div>
               
               <form onSubmit={handleSubmit} className="space-y-8">
@@ -487,14 +487,14 @@ export default function ContentAndCampaignsAdmin() {
           )}
 
           {/* List */}
-          <div className="bg-white border border-neutral-200 shadow-xl overflow-hidden">
-            <table className="w-full text-left">
+          <div className="bg-white border border-neutral-200 shadow-xl overflow-x-auto w-full">
+            <table className="w-full text-left min-w-[800px]">
               <thead>
-                <tr className="bg-neutral-50 border-b border-neutral-200">
-                  <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-500">Post Details</th>
-                  <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-500">Author</th>
-                  <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-500">Status</th>
-                  <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-500 text-right">Actions</th>
+                <tr className="bg-[#6b7b65] border-b border-[#7a8a74]">
+                  <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-white/90">Post Details</th>
+                  <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-white/90">Author</th>
+                  <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-white/90">Status</th>
+                  <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-white/90 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-neutral-100">

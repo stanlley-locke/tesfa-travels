@@ -13,7 +13,6 @@ import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { Partners } from '@/components/sections/Partners';
 
 export default function HomeClient({ destinations, offers = [] }: { destinations: any[], offers?: any[] }) {
-  const [emblaRef] = useEmblaCarousel({ align: 'start', dragFree: true });
   const [reviewsRef] = useEmblaCarousel({ align: 'start', dragFree: true });
   const aboutRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -89,9 +88,9 @@ export default function HomeClient({ destinations, offers = [] }: { destinations
 
       {/* Hero Section */}
       {/* Hero Section */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center pt-20 overflow-hidden bg-[#111111] [clip-path:inset(0)]">
+      <section className="relative min-h-[100dvh] flex flex-col items-center justify-center pt-24 pb-8 overflow-x-hidden overflow-y-auto bg-[#111111] md:[clip-path:inset(0)]">
         {/* Background Image / Video - Constant/Fixed */}
-        <div className="fixed inset-0 z-0 bg-slate-900">
+        <div className="absolute md:fixed inset-0 z-0 bg-slate-900">
           <video
             autoPlay
             loop
@@ -102,24 +101,19 @@ export default function HomeClient({ destinations, offers = [] }: { destinations
             <source src="/assets/12449638_3840_2160_120fps.mp4" type="video/mp4" />
           </video>
           {/* A gradient overlay fading smoothly into the white globe section */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-white"></div>
-        </div>
-
-        {/* Accordion Gallery Overlay */}
-        <div className="absolute bottom-8 right-8 z-30 hidden md:block">
-          <AccordionGallery />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-[#111111]"></div>
         </div>
 
         {/* Content */}
-        <div className="relative z-10 container mx-auto px-6 max-w-5xl text-center flex flex-col items-center justify-center pt-20">
+        <div className="relative z-10 container mx-auto px-6 max-w-5xl text-center flex flex-col items-center justify-center flex-1 py-12">
           <h1 
-            className="text-[56px] md:text-[80px] font-medium text-white mb-8 leading-[1.05] tracking-tight"
+            className="text-4xl sm:text-5xl md:text-[80px] font-medium text-white mb-8 leading-[1.05] tracking-tight"
             style={{ fontFamily: 'var(--font-sans)' }}
           >
             Flying is our business,<br />
             <span className="font-light italic text-neutral-300" style={{ fontFamily: 'var(--font-serif)' }}>service is our asset.</span>
           </h1>
-          <div className="flex justify-center mt-4">
+          <div className="flex justify-center mt-4 mb-8 md:mb-0">
             <Link
               href="/bookings"
               className="bg-[#333333] hover:bg-[#1a1a1a] text-[#e0e0e0] font-medium px-5 py-2.5 flex items-center gap-2 transition-colors text-sm"
@@ -129,11 +123,13 @@ export default function HomeClient({ destinations, offers = [] }: { destinations
           </div>
         </div>
 
-        {/* Floating Cards Container - Bottom Left */}
-        <div className="absolute bottom-8 left-8 z-20 hidden md:flex items-center gap-6">
-          {/* Card 1: Destination Shortcut */}
+        {/* Floating Elements Container - Mobile Stack / Desktop Absolute */}
+        <div className="relative md:absolute bottom-0 md:bottom-8 left-0 md:left-8 right-0 md:right-8 z-20 flex flex-col md:flex-row md:items-end justify-between gap-6 px-6 md:px-0 w-full md:w-auto">
+          
+          {/* Left Cards Wrapper */}
+          <div className="flex flex-col gap-4 w-full md:w-auto">
           {destinations && destinations.length > 0 && (
-            <div className="bg-white p-4 rounded-none shadow-2xl flex items-center gap-6 w-[360px] h-[140px] relative overflow-hidden">
+            <div className="bg-white p-4 rounded-none shadow-2xl flex items-center gap-4 sm:gap-6 w-full md:w-[360px] max-w-[360px] h-[140px] relative overflow-hidden mx-auto md:mx-0">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentDestinationIndex}
@@ -171,7 +167,7 @@ export default function HomeClient({ destinations, offers = [] }: { destinations
 
           {/* Card 2: Premium Package / Offer */}
           {offers && offers.length > 0 && (
-            <div className="bg-white p-4 rounded-none shadow-2xl flex items-center gap-6 w-[360px] h-[140px] relative overflow-hidden">
+            <div className="bg-white p-4 rounded-none shadow-2xl flex items-center gap-4 sm:gap-6 w-full md:w-[360px] max-w-[360px] h-[140px] relative overflow-hidden mx-auto md:mx-0">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentOfferIndex}
@@ -203,6 +199,12 @@ export default function HomeClient({ destinations, offers = [] }: { destinations
               </AnimatePresence>
             </div>
           )}
+          </div>
+
+          {/* Right Accordion Gallery */}
+          <div className="w-full md:w-auto flex justify-center md:block mt-6 md:mt-0 pb-12 md:pb-0 relative z-30">
+            <AccordionGallery />
+          </div>
         </div>
       </section>
 
@@ -214,7 +216,7 @@ export default function HomeClient({ destinations, offers = [] }: { destinations
           dark={1}
           baseColor={[1, 1, 1]}
           glowColor={[1, 1, 1]}
-          className='w-[800px] md:w-[1200px] absolute -bottom-40 translate-y-4 -right-20 md:-right-40 opacity-50 z-0'
+          className='w-[1400px] md:w-[2400px] absolute -bottom-[200px] md:-bottom-[400px] -right-[400px] md:-right-[800px] opacity-30 md:opacity-50 z-0 pointer-events-none'
         />
         
         <div className="container mx-auto max-w-7xl relative z-10">
@@ -222,7 +224,7 @@ export default function HomeClient({ destinations, offers = [] }: { destinations
             <div className="max-w-2xl">
               <span className="text-[#6b7b65] font-bold tracking-[0.2em] text-xs uppercase mb-6 block">[01] Destinations</span>
               <h2 
-                className="text-5xl md:text-7xl font-medium text-[#1a1a1a] leading-[1.1] tracking-tight mb-8"
+                className="text-4xl sm:text-5xl md:text-7xl font-medium text-[#1a1a1a] leading-[1.1] tracking-tight mb-8"
                 style={{ fontFamily: 'var(--font-sans)' }}
               >
                 Explore our most<br />
@@ -292,7 +294,7 @@ export default function HomeClient({ destinations, offers = [] }: { destinations
             <div className="max-w-3xl">
               <span className="text-[#6b7b65] font-bold tracking-[0.2em] text-xs uppercase mb-6 block">[02] Services</span>
               <h2 
-                className="text-5xl md:text-7xl font-medium text-[#1a1a1a] leading-[1.1] tracking-tight"
+                className="text-4xl sm:text-5xl md:text-7xl font-medium text-[#1a1a1a] leading-[1.1] tracking-tight"
                 style={{ fontFamily: 'var(--font-sans)' }}
               >
                 Comprehensive travel<br />
@@ -378,7 +380,7 @@ export default function HomeClient({ destinations, offers = [] }: { destinations
             <div className="order-1 lg:order-2">
               <span className="text-[#6b7b65] font-bold tracking-[0.2em] text-xs uppercase mb-8 block">[03] About Us</span>
               <h2 
-                className="text-5xl md:text-7xl font-medium mb-10 leading-[1.1] tracking-tight"
+                className="text-4xl sm:text-5xl md:text-7xl font-medium mb-10 leading-[1.1] tracking-tight"
                 style={{ fontFamily: 'var(--font-sans)' }}
               >
                 Why Choose<br />
@@ -446,7 +448,7 @@ export default function HomeClient({ destinations, offers = [] }: { destinations
           <div className="mb-24 text-center">
             <span className="text-[#6b7b65] font-bold tracking-[0.2em] text-xs uppercase mb-6 block">[04] FAQ</span>
             <h2 
-              className="text-5xl md:text-6xl font-medium text-[#1a1a1a] tracking-tight"
+              className="text-4xl sm:text-5xl md:text-6xl font-medium text-[#1a1a1a] tracking-tight"
               style={{ fontFamily: 'var(--font-sans)' }}
             >
               Common <span className="font-light italic" style={{ fontFamily: 'var(--font-serif)' }}>questions</span>
@@ -484,8 +486,8 @@ export default function HomeClient({ destinations, offers = [] }: { destinations
             transition={{ repeat: Infinity, ease: "linear", duration: 15 }}
             className="flex whitespace-nowrap"
           >
-            <span className="text-[40vw] font-black tracking-tighter leading-none group-hover:text-white transition-colors duration-1000">TESFA TRAVELS </span>
-            <span className="text-[40vw] font-black tracking-tighter leading-none group-hover:text-white transition-colors duration-1000">TESFA TRAVELS </span>
+            <span className="text-[150vw] md:text-[40vw] font-black tracking-tighter leading-none group-hover:text-white transition-colors duration-1000">TESFA TRAVELS </span>
+            <span className="text-[150vw] md:text-[40vw] font-black tracking-tighter leading-none group-hover:text-white transition-colors duration-1000">TESFA TRAVELS </span>
           </motion.div>
         </div>
 

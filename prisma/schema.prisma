@@ -46,6 +46,8 @@ model Ticket {
   pnr            String   @unique
   airline        String
   passengerName  String
+  route          String   @default("N/A")
+  commission     Float    @default(0)
   status         String   @default("PENDING") // ISSUED, PENDING, CANCELLED
   gdsSyncStatus  String   @default("UNSYNCED") // SYNCED, UNSYNCED, ERROR
   createdAt      DateTime @default(now())
@@ -56,6 +58,9 @@ model VisaApplication {
   id              String   @id @default(cuid())
   country         String
   passportDetails String
+  type            String   @default("Single")
+  travelDate      DateTime?
+  fee             Float    @default(0)
   status          String   @default("RECEIVED") // RECEIVED, PROCESSING, APPROVED, DELIVERED
   applicantName   String
   createdAt       DateTime @default(now())

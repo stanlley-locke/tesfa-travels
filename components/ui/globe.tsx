@@ -133,7 +133,7 @@ export default function Earth({
   }, [mapBrightness, dark, baseColor, glowColor]);
 
   return (
-    <div className={className} style={{ width: '100%', aspectRatio: 1 }}>
+    <div className={className} style={{ aspectRatio: 1 }}>
       <canvas
         ref={canvasRef}
         style={{

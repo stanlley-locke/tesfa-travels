@@ -149,33 +149,33 @@ export default function OffersAdmin() {
       </div>
 
       {isFormOpen && (
-        <div className="bg-white border border-neutral-200 shadow-2xl p-10 mb-12 relative">
-          <button onClick={() => setIsFormOpen(false)} className="absolute top-6 right-6 text-neutral-400 hover:text-black">
+        <div className="bg-[#6b7b65] border border-[#7a8a74] shadow-2xl p-10 mb-12 relative text-white">
+          <button onClick={() => setIsFormOpen(false)} className="absolute top-6 right-6 text-white/50 hover:text-white">
             <Archive size={20} />
           </button>
-          <div className="mb-8 border-b border-neutral-100 pb-6">
-             <h3 className="text-3xl font-bold text-[#111111] tracking-tighter" style={{ fontFamily: 'var(--font-serif)' }}>
+          <div className="mb-8 border-b border-white/10 pb-6">
+             <h3 className="text-3xl font-bold text-white tracking-tighter" style={{ fontFamily: 'var(--font-serif)' }}>
                {isEditing ? 'Edit Promotion' : 'Create New Promotion'}
              </h3>
-             <p className="text-[10px] uppercase tracking-widest text-neutral-400 font-bold mt-2">Publish a new deal to the homepage and offers page.</p>
+             <p className="text-[10px] uppercase tracking-widest text-white/70 font-bold mt-2">Publish a new deal to the homepage and offers page.</p>
           </div>
           
           <form onSubmit={handleSubmit} className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
-              <div className="border-b border-neutral-200 pb-2">
-                <label className="text-[9px] font-bold tracking-[0.2em] uppercase text-neutral-400 block mb-3">Offer Title</label>
-                <input required type="text" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full bg-transparent border-none text-lg text-[#111111] font-medium outline-none placeholder:text-neutral-300" placeholder="e.g. Dubai Summer Deal" />
+              <div className="border-b border-white/10 pb-2">
+                <label className="text-[9px] font-bold tracking-[0.2em] uppercase text-white/50 block mb-3">Offer Title</label>
+                <input required type="text" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full bg-transparent border-none text-lg text-white font-medium outline-none placeholder:text-white/30" placeholder="e.g. Dubai Summer Deal" />
               </div>
-              <div className="border-b border-neutral-200 pb-2">
-                <label className="text-[9px] font-bold tracking-[0.2em] uppercase text-neutral-400 block mb-3">Pricing Details</label>
-                <input required type="text" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} className="w-full bg-transparent border-none text-lg text-[#111111] font-medium outline-none placeholder:text-neutral-300" placeholder="e.g. From $450/person" />
+              <div className="border-b border-white/10 pb-2">
+                <label className="text-[9px] font-bold tracking-[0.2em] uppercase text-white/50 block mb-3">Pricing Details</label>
+                <input required type="text" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} className="w-full bg-transparent border-none text-lg text-white font-medium outline-none placeholder:text-white/30" placeholder="e.g. From $450/person" />
               </div>
-              <div className="col-span-1 md:col-span-2 border-b border-neutral-200 pb-2">
-                <label className="text-[9px] font-bold tracking-[0.2em] uppercase text-neutral-400 block mb-3">Validity Period (Optional)</label>
-                <input type="date" value={formData.validUntil} onChange={e => setFormData({...formData, validUntil: e.target.value})} className="w-full md:w-1/2 bg-transparent border-none text-sm text-[#111111] font-medium outline-none placeholder:text-neutral-300" />
+              <div className="col-span-1 md:col-span-2 border-b border-white/10 pb-2">
+                <label className="text-[9px] font-bold tracking-[0.2em] uppercase text-white/50 block mb-3">Validity Period (Optional)</label>
+                <input type="date" value={formData.validUntil} onChange={e => setFormData({...formData, validUntil: e.target.value})} className="w-full md:w-1/2 bg-transparent border-none text-sm text-white font-medium outline-none placeholder:text-white/30" />
               </div>
-              <div className="col-span-1 border-b border-neutral-200 pb-2">
-                <label className="text-[9px] font-bold tracking-[0.2em] uppercase text-neutral-400 block mb-3">Image</label>
+              <div className="col-span-1 border-b border-white/10 pb-2">
+                <label className="text-[9px] font-bold tracking-[0.2em] uppercase text-white/50 block mb-3">Image</label>
                 <div className="flex flex-col gap-3">
                   <div className="flex gap-2">
                     <input type="text" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} className="flex-1 bg-transparent border border-neutral-200 px-4 py-2 text-xs text-[#111111] font-mono outline-none placeholder:text-neutral-300" placeholder="Paste URL or upload local file..." />
@@ -185,23 +185,23 @@ export default function OffersAdmin() {
                     <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleImageUpload} />
                   </div>
                   {formData.image && (
-                    <div className="relative h-24 w-40 border border-neutral-200 bg-neutral-50 overflow-hidden">
+                    <div className="relative h-24 w-40 border border-[#7a8a74] bg-[#5a6a54] overflow-hidden">
                       <Image src={formData.image} alt="Preview" fill className="object-cover" />
                     </div>
                   )}
                 </div>
               </div>
-              <div className="col-span-1 border-b border-neutral-200 pb-2">
-                <label className="text-[9px] font-bold tracking-[0.2em] uppercase text-neutral-400 block mb-3">Description</label>
-                <textarea required rows={4} value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full bg-transparent border-none text-sm text-[#111111] leading-relaxed outline-none resize-none placeholder:text-neutral-300" placeholder="Short description of the offer..." />
+              <div className="col-span-1 border-b border-white/10 pb-2">
+                <label className="text-[9px] font-bold tracking-[0.2em] uppercase text-white/50 block mb-3">Description</label>
+                <textarea required rows={4} value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full bg-transparent border-none text-sm text-white leading-relaxed outline-none resize-none placeholder:text-white/30" placeholder="Short description of the offer..." />
               </div>
-              <div className="col-span-1 border-b border-neutral-200 pb-2">
-                <label className="text-[9px] font-bold tracking-[0.2em] uppercase text-neutral-400 block mb-3">Included Items (One per line)</label>
-                <textarea rows={4} value={formData.includedItemsText} onChange={e => setFormData({...formData, includedItemsText: e.target.value})} className="w-full bg-transparent border-none text-sm text-[#111111] leading-relaxed outline-none resize-none placeholder:text-neutral-300" placeholder="Premium Accommodation&#10;Round-trip Airport Transfers" />
+              <div className="col-span-1 border-b border-white/10 pb-2">
+                <label className="text-[9px] font-bold tracking-[0.2em] uppercase text-white/50 block mb-3">Included Items (One per line)</label>
+                <textarea rows={4} value={formData.includedItemsText} onChange={e => setFormData({...formData, includedItemsText: e.target.value})} className="w-full bg-transparent border-none text-sm text-white leading-relaxed outline-none resize-none placeholder:text-white/30" placeholder="Premium Accommodation&#10;Round-trip Airport Transfers" />
               </div>
             </div>
             <div className="flex justify-end pt-4">
-              <button type="submit" disabled={isSubmitting} className="bg-[#111111] hover:bg-[#6b7b65] text-white px-10 py-4 text-[10px] font-bold tracking-widest uppercase transition-colors flex items-center gap-3 disabled:opacity-50">
+              <button type="submit" disabled={isSubmitting} className="bg-[#111111] hover:bg-[#5a6a54] border border-[#111111] text-white px-10 py-4 text-[10px] font-bold tracking-widest uppercase transition-colors flex items-center gap-3 disabled:opacity-50 shadow-md">
                 {isSubmitting ? 'Saving...' : (isEditing ? 'Save Changes' : 'Publish Offer')} <CheckCircle2 size={14} />
               </button>
             </div>
@@ -210,14 +210,14 @@ export default function OffersAdmin() {
       )}
 
       {/* List */}
-      <div className="bg-white border border-neutral-200 shadow-xl overflow-hidden">
-        <table className="w-full text-left">
+      <div className="bg-white border border-neutral-200 shadow-xl overflow-x-auto w-full">
+        <table className="w-full text-left min-w-[800px]">
           <thead>
-            <tr className="bg-neutral-50 border-b border-neutral-200">
-              <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-500">Offer Detail</th>
-              <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-500">Price</th>
-              <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-500">Status</th>
-              <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-500 text-right">Actions</th>
+            <tr className="bg-[#6b7b65] text-white border-b border-[#7a8a74]">
+              <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-white/90">Offer Detail</th>
+              <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-white/90">Price</th>
+              <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-white/90">Status</th>
+              <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-white/90 text-right">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-100">

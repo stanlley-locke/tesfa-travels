@@ -77,7 +77,7 @@ export function FlightDeals() {
         <div className="container mx-auto max-w-7xl">
           <div className="mb-16">
             <span className="text-[#6b7b65] font-bold tracking-[0.2em] text-xs uppercase mb-6 block">East Africa & Domestic</span>
-            <h2 className="text-4xl font-medium tracking-tight">Local & Regional <span className="font-light italic" style={{ fontFamily: 'var(--font-serif)' }}>Flights</span></h2>
+            <h2 className="text-4xl sm:text-5xl font-medium tracking-tight">Local & Regional <span className="font-light italic" style={{ fontFamily: 'var(--font-serif)' }}>Flights</span></h2>
             <p className="text-neutral-500 font-light mt-4">Explore destinations across Kenya, Uganda, and Tanzania with no visa required.</p>
           </div>
 
@@ -114,7 +114,7 @@ export function FlightDeals() {
         <div className="container mx-auto max-w-7xl">
           <div className="mb-16">
             <span className="text-[#6b7b65] font-bold tracking-[0.2em] text-xs uppercase mb-6 block">Global Reach</span>
-            <h2 className="text-4xl font-medium tracking-tight">International <span className="font-light italic" style={{ fontFamily: 'var(--font-serif)' }}>Flights</span></h2>
+            <h2 className="text-4xl sm:text-5xl font-medium tracking-tight">International <span className="font-light italic" style={{ fontFamily: 'var(--font-serif)' }}>Flights</span></h2>
             <p className="text-neutral-500 font-light mt-4">Premium travel to major hubs worldwide with our trusted airline partners.</p>
           </div>
 
@@ -151,7 +151,7 @@ export function FlightDeals() {
         <div className="container mx-auto max-w-7xl">
           <div className="mb-20 text-center">
             <span className="text-[#6b7b65] font-bold tracking-[0.2em] text-xs uppercase mb-6 block">Network</span>
-            <h2 className="text-5xl font-medium tracking-tight">Our Airline <span className="font-light italic" style={{ fontFamily: 'var(--font-serif)' }}>Partners</span></h2>
+            <h2 className="text-4xl sm:text-5xl font-medium tracking-tight">Our Airline <span className="font-light italic" style={{ fontFamily: 'var(--font-serif)' }}>Partners</span></h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-neutral-200 border border-neutral-200">
@@ -178,7 +178,7 @@ export function FlightDeals() {
         <div className="container mx-auto max-w-5xl">
           <div className="mb-20 text-center">
             <span className="text-[#6b7b65] font-bold tracking-[0.2em] text-xs uppercase mb-6 block">Excellence</span>
-            <h2 className="text-5xl font-medium tracking-tight">Why Book Flights With <span className="font-light italic" style={{ fontFamily: 'var(--font-serif)' }}>Tesfa?</span></h2>
+            <h2 className="text-4xl sm:text-5xl font-medium tracking-tight">Why Book Flights With <span className="font-light italic" style={{ fontFamily: 'var(--font-serif)' }}>Tesfa?</span></h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12">

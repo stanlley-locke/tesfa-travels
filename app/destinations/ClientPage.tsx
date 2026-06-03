@@ -78,7 +78,7 @@ export default function DestinationsClientPage({ destinations }: { destinations:
         <div className="container mx-auto max-w-7xl relative z-10 text-white text-center flex flex-col items-center mt-10">
           <span className="text-[#6b7b65] font-bold tracking-[0.4em] text-[10px] uppercase mb-6 block">Explore the World</span>
           <h1 
-            className="text-5xl md:text-8xl font-medium tracking-tight mb-8 leading-[1.05]"
+            className="text-4xl sm:text-5xl md:text-8xl font-medium tracking-tight mb-8 leading-[1.05]"
             style={{ fontFamily: 'var(--font-sans)' }}
           >
             Global <span className="font-light italic" style={{ fontFamily: 'var(--font-serif)' }}>Destinations</span>
@@ -94,7 +94,7 @@ export default function DestinationsClientPage({ destinations }: { destinations:
         <div className="bg-white p-2 shadow-2xl flex border border-neutral-100">
           <button 
             onClick={() => setActiveTab('packages')}
-            className={`px-12 py-5 text-xs font-bold uppercase tracking-[0.2em] transition-colors ${
+            className={`px-6 md:px-12 py-4 md:py-5 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] transition-colors ${
               activeTab === 'packages' ? 'bg-[#1a1a1a] text-white' : 'bg-transparent text-neutral-400 hover:text-black hover:bg-neutral-50'
             }`}
           >
@@ -102,7 +102,7 @@ export default function DestinationsClientPage({ destinations }: { destinations:
           </button>
           <button 
             onClick={() => setActiveTab('flights')}
-            className={`px-12 py-5 text-xs font-bold uppercase tracking-[0.2em] transition-colors ${
+            className={`px-6 md:px-12 py-4 md:py-5 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] transition-colors ${
               activeTab === 'flights' ? 'bg-[#1a1a1a] text-white' : 'bg-transparent text-neutral-400 hover:text-black hover:bg-neutral-50'
             }`}
           >
@@ -119,7 +119,7 @@ export default function DestinationsClientPage({ destinations }: { destinations:
           dark={1}
           baseColor={[1, 1, 1]}
           glowColor={[1, 1, 1]}
-          className='w-[800px] md:w-[1200px] absolute -bottom-40 translate-y-4 -right-20 md:-right-40 opacity-50 z-0'
+          className='w-[1400px] md:w-[2400px] absolute -bottom-[200px] md:-bottom-[400px] -right-[400px] md:-right-[800px] opacity-30 md:opacity-50 z-0 pointer-events-none'
         />
         
         <div className="container mx-auto max-w-7xl relative z-10">

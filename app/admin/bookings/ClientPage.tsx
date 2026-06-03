@@ -4,10 +4,14 @@ import { Search, Plus, MoreHorizontal, MessageCircle, Ticket, Users, RefreshCw, 
 import Link from 'next/link';
 import { useState } from 'react';
 import { markInquiryRead } from '@/app/actions/inquiries';
+import { exportToExcel, exportToPDF } from '@/lib/exportUtils';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FileSpreadsheet, FileText, ChevronDown } from 'lucide-react';
 
 export default function ClientsCRMClientPage({ initialInquiries }: { initialInquiries: any[] }) {
   const [activeTab, setActiveTab] = useState('messages');
   const [activeMessage, setActiveMessage] = useState<string | null>(initialInquiries.length > 0 ? initialInquiries[0].id : null);
+  const [isExportMenuOpen, setIsExportMenuOpen] = useState(false);
 
   // Dynamically compute unique customers from inquiries
   const uniqueCustomersMap = new Map();
@@ -43,6 +47,25 @@ export default function ClientsCRMClientPage({ initialInquiries }: { initialInqu
     }
   };
 
+  const handleExportExcel = () => {
+    const dataToExport = clients.map(c => ({
+      Name: c.name,
+      Email: c.email,
+      Status: c.status,
+      Volume: c.volume,
+      LatestActivity: c.latestActivity
+    }));
+    exportToExcel(dataToExport, `Tesfa_CRM_Clients_${new Date().toISOString().split('T')[0]}`);
+    setIsExportMenuOpen(false);
+  };
+
+  const handleExportPDF = () => {
+    const headers = ['Name', 'Email', 'Status', 'Volume', 'Latest Activity'];
+    const dataToExport = clients.map(c => [c.name, c.email, c.status, c.volume, c.latestActivity]);
+    exportToPDF(headers, dataToExport, `Tesfa_CRM_Clients_${new Date().toISOString().split('T')[0]}`, 'Tesfa CRM Clients Report');
+    setIsExportMenuOpen(false);
+  };
+
   return (
     <div className="space-y-12 pb-20 p-10 flex-1">
       {/* Header */}
@@ -62,6 +85,37 @@ export default function ClientsCRMClientPage({ initialInquiries }: { initialInqu
               className="bg-white border border-neutral-200 pl-10 pr-4 py-3 text-[10px] font-bold uppercase tracking-widest outline-none focus:border-[#6b7b65] w-64 shadow-sm"
             />
           </div>
+          <div className="relative">
+            <button 
+              onClick={() => setIsExportMenuOpen(!isExportMenuOpen)}
+              className="bg-white text-[#111111] px-6 py-3 text-[10px] font-bold tracking-widest uppercase hover:bg-neutral-50 transition-colors flex items-center gap-2 border border-neutral-200 shadow-sm"
+            >
+              Export <ChevronDown size={14} className={`transition-transform ${isExportMenuOpen ? 'rotate-180' : ''}`} />
+            </button>
+            <AnimatePresence>
+              {isExportMenuOpen && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="absolute right-0 top-full mt-2 w-48 bg-white border border-neutral-200 shadow-xl z-50 flex flex-col"
+                >
+                  <button 
+                    onClick={handleExportExcel}
+                    className="flex items-center gap-3 px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-[#111111] hover:bg-[#fafafa] hover:text-[#6b7b65] transition-colors text-left border-b border-neutral-100"
+                  >
+                    <FileSpreadsheet size={14} /> Excel
+                  </button>
+                  <button 
+                    onClick={handleExportPDF}
+                    className="flex items-center gap-3 px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-[#111111] hover:bg-[#fafafa] hover:text-[#6b7b65] transition-colors text-left"
+                  >
+                    <FileText size={14} /> PDF
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
           <button className="bg-[#111111] text-white px-6 py-3 text-[10px] font-bold tracking-widest uppercase hover:bg-[#6b7b65] transition-colors flex items-center gap-2 border border-[#111111] shadow-sm">
             <Plus size={14} /> New Client
           </button>
@@ -80,8 +134,8 @@ export default function ClientsCRMClientPage({ initialInquiries }: { initialInqu
             onClick={() => setActiveTab(tab.id)}
             className={`px-8 py-4 text-[10px] font-bold tracking-[0.2em] uppercase flex items-center gap-3 transition-colors ${
               activeTab === tab.id 
-                ? 'bg-[#111111] text-white' 
-                : 'bg-transparent text-neutral-400 hover:text-[#111111] hover:bg-neutral-50'
+                ? 'bg-[#6b7b65] text-white shadow-md' 
+                : 'bg-transparent text-neutral-400 hover:text-[#111111] hover:bg-[#6b7b65]/10'
             }`}
           >
             <tab.icon size={14} />
@@ -91,8 +145,8 @@ export default function ClientsCRMClientPage({ initialInquiries }: { initialInqu
       </div>
 
       {activeTab === 'customers' && (
-        <div className="bg-white border border-neutral-200 shadow-xl overflow-hidden">
-          <table className="w-full text-left">
+        <div className="bg-white border border-neutral-200 shadow-xl overflow-x-auto w-full">
+          <table className="w-full text-left min-w-[1000px]">
             <thead>
               <tr className="bg-neutral-50 border-b border-neutral-200">
                 <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-500">Client Profile</th>
@@ -143,8 +197,8 @@ export default function ClientsCRMClientPage({ initialInquiries }: { initialInqu
       )}
 
       {activeTab === 'tickets' && (
-        <div className="bg-white border border-neutral-200 shadow-xl overflow-hidden">
-          <table className="w-full text-left">
+        <div className="bg-white border border-neutral-200 shadow-xl overflow-x-auto w-full">
+          <table className="w-full text-left min-w-[1000px]">
             <thead>
               <tr className="bg-neutral-50 border-b border-neutral-200">
                 <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-500">Product / Service</th>
@@ -187,12 +241,12 @@ export default function ClientsCRMClientPage({ initialInquiries }: { initialInqu
       {activeTab === 'messages' && (
         <div className="bg-white border border-neutral-200 flex flex-col h-[800px] overflow-hidden shadow-2xl">
           {/* Messages Header */}
-          <div className="p-6 border-b border-neutral-200 flex justify-between items-center bg-[#fafafa]">
+          <div className="p-6 border-b border-[#6b7b65] flex justify-between items-center bg-[#6b7b65] text-white shadow-lg z-10 relative">
             <div>
-              <h2 className="text-3xl font-bold text-[#111111] tracking-tighter" style={{ fontFamily: 'var(--font-serif)' }}>Inquiries Dashboard</h2>
-              <p className="text-[10px] uppercase tracking-widest text-neutral-400 font-bold mt-2">Real-time communications from visitors.</p>
+              <h2 className="text-3xl font-bold text-white tracking-tighter" style={{ fontFamily: 'var(--font-serif)' }}>Inquiries Dashboard</h2>
+              <p className="text-[10px] uppercase tracking-widest text-white/70 font-bold mt-2">Real-time communications from visitors.</p>
             </div>
-            <button className="flex items-center gap-2 px-6 py-3 border border-neutral-200 bg-white text-[#111111] text-[9px] font-bold uppercase tracking-[0.2em] hover:bg-neutral-50 hover:border-neutral-300 transition-colors shadow-sm">
+            <button className="flex items-center gap-2 px-6 py-3 border border-white/20 bg-white/10 text-white text-[9px] font-bold uppercase tracking-[0.2em] hover:bg-white/20 transition-colors shadow-sm">
               <RefreshCw size={12} /> Sync Inbox
             </button>
           </div>
@@ -225,14 +279,14 @@ export default function ClientsCRMClientPage({ initialInquiries }: { initialInqu
                       }`}
                     >
                       <div className="flex justify-between items-start mb-2">
-                        <span className={`text-sm font-bold ${inq.status === 'UNREAD' ? 'text-[#111111]' : 'text-neutral-500'}`}>{inq.firstName} {inq.lastName}</span>
+                        <span className={`text-sm font-bold ${inq.status === 'UNREAD' ? 'text-[#6b7b65]' : 'text-neutral-500'}`}>{inq.firstName} {inq.lastName}</span>
                         <span className="text-[9px] font-bold uppercase tracking-widest text-neutral-400">
                           {new Date(inq.createdAt).toLocaleDateString()}
                         </span>
                       </div>
                       <p className={`text-xs mb-2 flex items-center gap-2 ${inq.status === 'UNREAD' ? 'text-[#111111] font-bold' : 'text-neutral-500'}`}>
                         {inq.package?.name || inq.service}
-                        <span className="px-2 py-0.5 bg-neutral-100 text-[8px] tracking-widest uppercase rounded-sm border border-neutral-200 text-neutral-500">
+                        <span className="px-2 py-0.5 bg-[#6b7b65]/10 text-[8px] tracking-widest uppercase rounded-sm border border-[#6b7b65]/20 text-[#6b7b65] font-bold">
                           {inq.type}
                         </span>
                       </p>

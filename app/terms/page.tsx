@@ -10,7 +10,7 @@ export const metadata = {
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-white selection:bg-[#6b7b65] selection:text-white flex flex-col">
+    <div className="min-h-screen bg-white text-[#1a1a1a] selection:bg-[#6b7b65] selection:text-white flex flex-col">
       <Header />
       
       {/* Hero Section */}

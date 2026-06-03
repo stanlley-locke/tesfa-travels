@@ -104,7 +104,7 @@ export function Header() {
           className="flex w-max"
         >
           {/* First Set */}
-          <div className="flex gap-12 items-center pr-12">
+          <div className="flex gap-6 md:gap-12 items-center pr-6 md:pr-12">
             <span>NO MEMBERSHIP REQUIRED</span>
             <span className="text-[#e0e0e0]/30">•</span>
             <span>IATA-ACCREDITED AGENCY</span>
@@ -117,7 +117,7 @@ export function Header() {
             <span className="text-[#e0e0e0]/30">•</span>
           </div>
           {/* Duplicated Set for Seamless Loop */}
-          <div className="flex gap-12 items-center pr-12">
+          <div className="flex gap-6 md:gap-12 items-center pr-6 md:pr-12">
             <span>NO MEMBERSHIP REQUIRED</span>
             <span className="text-[#e0e0e0]/30">•</span>
             <span>IATA-ACCREDITED AGENCY</span>
@@ -133,12 +133,16 @@ export function Header() {
       </div>
 
       {/* Main Navbar */}
-      <nav className="w-full flex justify-center pt-6 px-4">
-        <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-none pl-6 lg:pl-8 pr-4 lg:pr-0 h-[64px] flex items-center justify-between gap-6 lg:gap-12 shadow-lg w-full max-w-fit">
-          {/* Logo */}
-          <Link href="/" className="flex items-center">
-            <h1 className="font-bold text-white text-xl tracking-tight" style={{ fontFamily: 'var(--font-serif)' }}>Tesfa Travel</h1>
-          </Link>
+      <nav className="w-full flex justify-center pt-6 px-4 relative z-50">
+        <div className="w-full lg:max-w-fit relative">
+          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-none pr-4 lg:pr-0 h-[64px] flex items-center justify-between gap-4 lg:gap-8 shadow-lg">
+            {/* Logo - flush full height, same treatment as Contact button */}
+            <Link href="/" className="flex items-center h-full gap-4">
+              <div className="h-full aspect-square flex-shrink-0 overflow-hidden">
+                <img src="/assets/logo.png" alt="Tesfa Travels Logo" className="h-full w-full object-cover" />
+              </div>
+              <span className="text-white font-medium tracking-wide text-xl hidden sm:block" style={{ fontFamily: 'var(--font-serif)' }}>Tesfa Travels</span>
+            </Link>
 
           {/* Desktop Navigation Links */}
           <div className="hidden lg:flex items-center justify-center">
@@ -223,17 +227,17 @@ export function Header() {
           >
             {isOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
-        </div>
+          </div>
 
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="lg:hidden bg-white border-t border-slate-100 overflow-hidden"
-            >
+          {/* Mobile Menu */}
+          <AnimatePresence>
+            {isOpen && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="lg:hidden absolute top-[64px] left-0 w-full bg-white border border-slate-100 shadow-2xl overflow-hidden z-50 origin-top"
+              >
               <div className="px-6 py-6 space-y-4">
                 {navigationItems.map((item) => (
                   <div key={item.label} className="space-y-2">
@@ -260,18 +264,19 @@ export function Header() {
                 ))}
                 <div className="pt-6 border-t border-slate-100 mt-4">
                   <Link
-                    href="/bookings"
+                    href="/contact"
                     onClick={() => setIsOpen(false)}
                     className="w-full bg-[#333333] hover:bg-[#1a1a1a] text-white text-[15px] font-medium px-6 py-4 flex items-center justify-center gap-2 transition-colors rounded-none"
                   >
                     <User size={18} />
-                    Login
+                    Contact
                   </Link>
                 </div>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
+        </div>
       </nav>
     </header>
   );

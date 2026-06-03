@@ -39,7 +39,7 @@ export default function PartnersPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a]/80 via-black/50 to-[#1a1a1a]"></div>
         <div className="container mx-auto max-w-5xl text-center relative z-10">
           <span className="text-[#6b7b65] font-bold tracking-[0.2em] text-xs uppercase mb-6 block">Global Network</span>
-          <h1 className="text-5xl md:text-7xl font-medium tracking-tight mb-8 drop-shadow-lg" style={{ fontFamily: 'var(--font-sans)' }}>
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-medium tracking-tight mb-8 drop-shadow-lg" style={{ fontFamily: 'var(--font-sans)' }}>
             Our Trusted <span className="font-light italic" style={{ fontFamily: 'var(--font-serif)' }}>Partners</span>
           </h1>
           <p className="text-xl text-neutral-300 font-light max-w-2xl mx-auto leading-relaxed drop-shadow-md">

@@ -2,8 +2,10 @@
 
 import { useState } from 'react';
 import { Package, BlogPost, Campaign } from '@prisma/client';
-import { Search, Plus, MapPin, Pencil, Trash2, Image as ImageIcon, CheckCircle, Clock } from 'lucide-react';
+import { Search, Plus, MapPin, Pencil, Trash2, Image as ImageIcon, CheckCircle, Clock, ChevronDown, FileSpreadsheet, FileText } from 'lucide-react';
 import { createPackage, updatePackage, updatePackageStatus, deletePackage } from '@/app/actions/packages';
+import { motion, AnimatePresence } from 'framer-motion';
+import { exportToExcel, exportToPDF } from '@/lib/exportUtils';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
@@ -18,6 +20,7 @@ export default function PackagesClientPage({
 }) {
   const [packages, setPackages] = useState(initialPackages);
   const [isCreating, setIsCreating] = useState(false);
+  const [isExportMenuOpen, setIsExportMenuOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [formData, setFormData] = useState<{
@@ -97,6 +100,27 @@ export default function PackagesClientPage({
     p.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleExportExcel = () => {
+    const dataToExport = filteredPackages.map((p: any) => ({
+      Destination: p.name,
+      Price: p.price,
+      Capacity: p.capacity || 'Unlimited',
+      Status: p.status,
+      Description: p.description
+    }));
+    exportToExcel(dataToExport, `Tesfa_Packages_${new Date().toISOString().split('T')[0]}`);
+    setIsExportMenuOpen(false);
+  };
+
+  const handleExportPDF = () => {
+    const headers = ['Destination', 'Price', 'Capacity', 'Status'];
+    const dataToExport = filteredPackages.map((p: any) => [
+      p.name, p.price, p.capacity || 'Unlimited', p.status
+    ]);
+    exportToPDF(headers, dataToExport, `Tesfa_Packages_${new Date().toISOString().split('T')[0]}`, 'Tesfa Travel Packages Report');
+    setIsExportMenuOpen(false);
+  };
+
   return (
     <div className="space-y-12 pb-20 p-10 flex-1">
       {/* Header */}
@@ -119,6 +143,37 @@ export default function PackagesClientPage({
               onChange={(e) => setSearchTerm(e.target.value)}
               className="bg-white border border-neutral-200 pl-10 pr-4 py-3 text-[10px] font-bold uppercase tracking-widest outline-none focus:border-[#6b7b65] w-64 shadow-sm placeholder:text-neutral-300"
             />
+          </div>
+          <div className="relative">
+            <button 
+              onClick={() => setIsExportMenuOpen(!isExportMenuOpen)}
+              className="bg-white text-[#111111] px-6 py-3 text-[10px] font-bold tracking-widest uppercase hover:bg-neutral-50 transition-colors flex items-center gap-2 border border-neutral-200 shadow-sm"
+            >
+              Export <ChevronDown size={14} className={`transition-transform ${isExportMenuOpen ? 'rotate-180' : ''}`} />
+            </button>
+            <AnimatePresence>
+              {isExportMenuOpen && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="absolute right-0 top-full mt-2 w-48 bg-white border border-neutral-200 shadow-xl z-50 flex flex-col"
+                >
+                  <button 
+                    onClick={handleExportExcel}
+                    className="flex items-center gap-3 px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-[#111111] hover:bg-[#fafafa] hover:text-[#6b7b65] transition-colors text-left border-b border-neutral-100"
+                  >
+                    <FileSpreadsheet size={14} /> Excel
+                  </button>
+                  <button 
+                    onClick={handleExportPDF}
+                    className="flex items-center gap-3 px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-[#111111] hover:bg-[#fafafa] hover:text-[#6b7b65] transition-colors text-left"
+                  >
+                    <FileText size={14} /> PDF
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
           <button 
             onClick={() => {
@@ -240,7 +295,7 @@ export default function PackagesClientPage({
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {filteredPackages.map((pkg) => (
-          <div key={pkg.id} className="bg-white border border-neutral-200 shadow-xl flex flex-col group overflow-hidden relative">
+          <div key={pkg.id} className="bg-[#6b7b65] border border-[#7a8a74] shadow-xl flex flex-col group overflow-hidden relative text-white">
             <div className="relative h-48 w-full bg-neutral-100 overflow-hidden">
               <Image 
                 src={pkg.image} 
@@ -265,32 +320,32 @@ export default function PackagesClientPage({
             <div className="p-6 flex-1 flex flex-col justify-between">
               <div>
                 <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-3xl font-bold tracking-tighter text-[#111111] leading-tight" style={{ fontFamily: 'var(--font-sans)' }}>{pkg.name}</h3>
+                  <h3 className="text-3xl font-bold tracking-tighter text-white leading-tight" style={{ fontFamily: 'var(--font-sans)' }}>{pkg.name}</h3>
                 </div>
-                <p className="text-neutral-500 text-sm font-light mb-6 line-clamp-2">{pkg.description}</p>
+                <p className="text-white/70 text-sm font-light mb-6 line-clamp-2">{pkg.description}</p>
               </div>
               
               <div>
-                <div className="h-px w-full bg-neutral-100 mb-4"></div>
+                <div className="h-px w-full bg-white/10 mb-4"></div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-mono font-bold text-[#6b7b65] uppercase">{pkg.price}</span>
+                  <span className="text-sm font-mono font-bold text-[#f3e5ab] uppercase">{pkg.price}</span>
                   
                   <div className="flex items-center gap-2">
                     <select 
                       value={pkg.status}
                       onChange={(e) => handleStatusChange(pkg.id, e.target.value)}
-                      className="text-[9px] font-bold tracking-widest text-neutral-500 uppercase bg-transparent outline-none border-none cursor-pointer hover:text-black transition-colors"
+                      className="text-[9px] font-bold tracking-widest text-white/50 uppercase bg-transparent outline-none border-none cursor-pointer hover:text-white transition-colors"
                     >
                       <option value="DRAFT">DRAFT</option>
                       <option value="PUBLISHED">PUBLISHED</option>
                       <option value="FULL">FULL</option>
                     </select>
                     
-                    <div className="flex gap-2 ml-4 border-l border-neutral-200 pl-4">
-                      <button onClick={() => handleEdit(pkg)} className="text-neutral-400 hover:text-[#111111] transition-colors" title="Edit">
+                    <div className="flex gap-2 ml-4 border-l border-white/10 pl-4">
+                      <button onClick={() => handleEdit(pkg)} className="text-white/50 hover:text-white transition-colors" title="Edit">
                         <Pencil size={14} />
                       </button>
-                      <button onClick={() => handleDelete(pkg.id)} className="text-neutral-400 hover:text-red-500 transition-colors" title="Delete">
+                      <button onClick={() => handleDelete(pkg.id)} className="text-white/50 hover:text-red-400 transition-colors" title="Delete">
                         <Trash2 size={14} />
                       </button>
                     </div>
