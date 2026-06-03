@@ -71,15 +71,14 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 
   const travelOpsItems = [
     { href: '/admin/ticketing', icon: Plane, label: 'IATA Ticketing' },
-    { href: '/admin/packages', icon: Mountain, label: 'Packages' },
+    { href: '/admin/packages', icon: Mountain, label: 'Flights & Destinations' },
     { href: '/admin/visa', icon: FileCheck, label: 'Visa Pipeline' },
   ];
 
   const crmMarketingItems = [
     { href: '/admin/bookings', icon: Users, label: 'Clients & CRM' },
-    { href: '/admin/marketing', icon: Megaphone, label: 'Promotions' },
-    { href: '/admin/blog', icon: MessageCircle, label: 'Blog Editor' },
-    { href: '/admin/campaigns', icon: Globe, label: 'Campaigns' },
+    { href: '/admin/offers', icon: Target, label: 'Offers & Promotions' },
+    { href: '/admin/blog', icon: Megaphone, label: 'Content & Campaigns' },
   ];
 
   if (pathname === '/admin/login') {

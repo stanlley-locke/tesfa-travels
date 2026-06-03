@@ -10,6 +10,8 @@ export async function createPackage(data: {
   image: string;
   capacity?: number;
   status?: string;
+  blogPostIds?: string[];
+  campaignIds?: string[];
 }) {
   try {
     const pkg = await prisma.package.create({
@@ -20,6 +22,12 @@ export async function createPackage(data: {
         image: data.image,
         capacity: data.capacity,
         status: data.status || 'PUBLISHED',
+        blogPosts: data.blogPostIds ? {
+          connect: data.blogPostIds.map(id => ({ id }))
+        } : undefined,
+        campaigns: data.campaignIds ? {
+          connect: data.campaignIds.map(id => ({ id }))
+        } : undefined,
       },
     });
     revalidatePath('/admin/packages');
@@ -38,11 +46,24 @@ export async function updatePackage(id: string, data: {
   image?: string;
   capacity?: number | null;
   status?: string;
+  blogPostIds?: string[];
+  campaignIds?: string[];
 }) {
   try {
+    const updateData: any = { ...data };
+    delete updateData.blogPostIds;
+    delete updateData.campaignIds;
+
+    if (data.blogPostIds) {
+      updateData.blogPosts = { set: data.blogPostIds.map(id => ({ id })) };
+    }
+    if (data.campaignIds) {
+      updateData.campaigns = { set: data.campaignIds.map(id => ({ id })) };
+    }
+
     const pkg = await prisma.package.update({
       where: { id },
-      data,
+      data: updateData,
     });
     revalidatePath('/admin/packages');
     revalidatePath('/');

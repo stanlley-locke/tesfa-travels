@@ -46,6 +46,8 @@ export async function createOffer(data: {
   price: string;
   image: string;
   isActive?: boolean;
+  validUntil?: Date | null;
+  includedItems?: string[];
 }) {
   try {
     const offer = await prisma.offer.create({
@@ -55,6 +57,8 @@ export async function createOffer(data: {
         price: data.price,
         image: data.image,
         isActive: data.isActive ?? true,
+        validUntil: data.validUntil,
+        includedItems: data.includedItems ?? [],
       },
     });
     revalidatePath('/admin/offers');
@@ -73,6 +77,8 @@ export async function updateOffer(id: string, data: {
   price?: string;
   image?: string;
   isActive?: boolean;
+  validUntil?: Date | null;
+  includedItems?: string[];
 }) {
   try {
     const offer = await prisma.offer.update({

@@ -1,18 +1,34 @@
 'use client';
 
 import { useState } from 'react';
-import { Package } from '@prisma/client';
+import { Package, BlogPost, Campaign } from '@prisma/client';
 import { Search, Plus, MapPin, Pencil, Trash2, Image as ImageIcon, CheckCircle, Clock } from 'lucide-react';
 import { createPackage, updatePackage, updatePackageStatus, deletePackage } from '@/app/actions/packages';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-export default function PackagesClientPage({ initialPackages }: { initialPackages: Package[] }) {
+export default function PackagesClientPage({ 
+  initialPackages, 
+  availableBlogPosts = [], 
+  availableCampaigns = [] 
+}: { 
+  initialPackages: any[],
+  availableBlogPosts?: BlogPost[],
+  availableCampaigns?: Campaign[]
+}) {
   const [packages, setPackages] = useState(initialPackages);
   const [isCreating, setIsCreating] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [formData, setFormData] = useState({ name: '', description: '', price: '', image: '', capacity: '' });
+  const [formData, setFormData] = useState<{
+    name: string;
+    description: string;
+    price: string;
+    image: string;
+    capacity: string;
+    blogPostIds: string[];
+    campaignIds: string[];
+  }>({ name: '', description: '', price: '', image: '', capacity: '', blogPostIds: [], campaignIds: [] });
   const router = useRouter();
 
   const handleCreate = async (e: React.FormEvent) => {
@@ -23,10 +39,10 @@ export default function PackagesClientPage({ initialPackages }: { initialPackage
         capacity: formData.capacity ? parseInt(formData.capacity) : null,
       });
       if (res.success && res.package) {
-        setPackages(packages.map(p => p.id === editingId ? res.package! : p));
+        setPackages(packages.map(p => p.id === editingId ? { ...p, ...res.package! } : p));
         setIsCreating(false);
         setEditingId(null);
-        setFormData({ name: '', description: '', price: '', image: '', capacity: '' });
+        setFormData({ name: '', description: '', price: '', image: '', capacity: '', blogPostIds: [], campaignIds: [] });
         router.refresh();
       }
     } else {
@@ -35,9 +51,9 @@ export default function PackagesClientPage({ initialPackages }: { initialPackage
         capacity: formData.capacity ? parseInt(formData.capacity) : undefined,
       });
       if (res.success && res.package) {
-        setPackages([res.package, ...packages]);
+        setPackages([{ ...res.package, blogPosts: [], campaigns: [] }, ...packages]);
         setIsCreating(false);
-        setFormData({ name: '', description: '', price: '', image: '', capacity: '' });
+        setFormData({ name: '', description: '', price: '', image: '', capacity: '', blogPostIds: [], campaignIds: [] });
         router.refresh();
       }
     }
@@ -61,13 +77,15 @@ export default function PackagesClientPage({ initialPackages }: { initialPackage
     }
   };
 
-  const handleEdit = (pkg: Package) => {
+  const handleEdit = (pkg: any) => {
     setFormData({
       name: pkg.name,
       description: pkg.description,
       price: pkg.price,
       image: pkg.image,
       capacity: pkg.capacity ? pkg.capacity.toString() : '',
+      blogPostIds: pkg.blogPosts ? pkg.blogPosts.map((bp: any) => bp.id) : [],
+      campaignIds: pkg.campaigns ? pkg.campaigns.map((c: any) => c.id) : [],
     });
     setEditingId(pkg.id);
     setIsCreating(true);
@@ -106,7 +124,7 @@ export default function PackagesClientPage({ initialPackages }: { initialPackage
             onClick={() => {
               setIsCreating(!isCreating);
               setEditingId(null);
-              setFormData({ name: '', description: '', price: '', image: '', capacity: '' });
+              setFormData({ name: '', description: '', price: '', image: '', capacity: '', blogPostIds: [], campaignIds: [] });
             }}
             className="bg-[#111111] text-white px-6 py-3 text-[10px] font-bold tracking-widest uppercase hover:bg-[#6b7b65] transition-colors flex items-center gap-2 border border-[#111111] shadow-sm"
           >
@@ -149,21 +167,74 @@ export default function PackagesClientPage({ initialPackages }: { initialPackage
                     reader.readAsDataURL(file);
                   }
                 }} 
-                className="w-full border-b border-neutral-200 py-2 outline-none focus:border-[#6b7b65] transition-colors bg-transparent text-xs" 
+                className="w-full text-xs file:mr-4 file:py-2 file:px-4 file:rounded-none file:border-0 file:text-xs file:font-bold file:uppercase file:bg-neutral-100 file:text-neutral-700 hover:file:bg-neutral-200"
               />
-              {formData.image && formData.image.startsWith('data:image') && (
-                <div className="mt-2 text-[10px] text-[#6b7b65] font-bold">Image attached successfully</div>
+              {formData.image && (
+                <div className="mt-2 w-32 h-20 relative">
+                  <Image src={formData.image} alt="Preview" fill className="object-cover" />
+                </div>
               )}
             </div>
             <div className="space-y-2 text-sm font-medium">
               <label className="text-neutral-500 text-xs tracking-widest uppercase">Capacity (Optional)</label>
-              <input type="number" value={formData.capacity} onChange={e => setFormData({...formData, capacity: e.target.value})} className="w-full border-b border-neutral-200 py-2 outline-none focus:border-[#6b7b65] transition-colors bg-transparent" placeholder="e.g. 12" />
+              <input type="number" value={formData.capacity} onChange={e => setFormData({...formData, capacity: e.target.value})} className="w-full border-b border-neutral-200 py-2 outline-none focus:border-[#6b7b65] transition-colors bg-transparent" placeholder="e.g. 10" />
             </div>
-            <div className="md:col-span-2 flex justify-end gap-4 mt-4">
-              <button type="button" onClick={() => { setIsCreating(false); setEditingId(null); }} className="px-6 py-2 border border-neutral-200 text-xs font-bold tracking-widest hover:bg-neutral-50 transition-colors uppercase">Cancel</button>
-              <button type="submit" className="px-6 py-2 bg-[#111111] text-white text-xs font-bold tracking-widest hover:bg-[#6b7b65] transition-colors uppercase">{editingId ? 'Update' : 'Publish'}</button>
+
+            {/* Relations */}
+            <div className="space-y-2 text-sm font-medium">
+              <label className="text-neutral-500 text-xs tracking-widest uppercase">Link Blog Posts</label>
+              <select 
+                multiple
+                value={formData.blogPostIds}
+                onChange={(e) => {
+                  const options = Array.from(e.target.selectedOptions, option => option.value);
+                  setFormData({...formData, blogPostIds: options});
+                }}
+                className="w-full border border-neutral-200 py-2 px-3 outline-none focus:border-[#6b7b65] transition-colors bg-transparent h-32"
+              >
+                {availableBlogPosts.map(bp => (
+                  <option key={bp.id} value={bp.id}>{bp.title}</option>
+                ))}
+              </select>
+              <p className="text-[10px] text-neutral-400">Hold Ctrl/Cmd to select multiple</p>
             </div>
+
+            <div className="space-y-2 text-sm font-medium">
+              <label className="text-neutral-500 text-xs tracking-widest uppercase">Link Campaigns</label>
+              <select 
+                multiple
+                value={formData.campaignIds}
+                onChange={(e) => {
+                  const options = Array.from(e.target.selectedOptions, option => option.value);
+                  setFormData({...formData, campaignIds: options});
+                }}
+                className="w-full border border-neutral-200 py-2 px-3 outline-none focus:border-[#6b7b65] transition-colors bg-transparent h-32"
+              >
+                {availableCampaigns.map(camp => (
+                  <option key={camp.id} value={camp.id}>{camp.name} ({camp.discountCode})</option>
+                ))}
+              </select>
+              <p className="text-[10px] text-neutral-400">Hold Ctrl/Cmd to select multiple</p>
+            </div>
+            {/* End Relations */}
           </form>
+          <div className="mt-8 flex justify-end gap-4">
+            <button 
+              onClick={() => {
+                setIsCreating(false);
+                setFormData({ name: '', description: '', price: '', image: '', capacity: '', blogPostIds: [], campaignIds: [] });
+              }}
+              className="px-6 py-2 text-xs font-bold uppercase tracking-widest text-neutral-500 hover:text-black transition-colors"
+            >
+              Cancel
+            </button>
+            <button 
+              onClick={handleCreate}
+              className="bg-[#6b7b65] text-white px-8 py-2 text-xs font-bold uppercase tracking-widest hover:bg-[#5a6a54] transition-colors"
+            >
+              {editingId ? 'Save Changes' : 'Create Destination'}
+            </button>
+          </div>
         </div>
       )}
 

@@ -30,9 +30,9 @@ function GlobalClock({ city, timeZone }: { city: string, timeZone: string }) {
   }, [timeZone]);
 
   return (
-    <div className="flex flex-col border-b border-neutral-200 pb-2 group">
-      <span className="text-sm font-mono text-neutral-500 mb-1">{time || '--:--'}</span>
-      <span className="text-xl font-medium group-hover:text-[#6b7b65] transition-colors tracking-tight">{city}</span>
+    <div className="flex flex-col border-b border-white/20 pb-2 group">
+      <span className="text-sm font-mono text-white/60 mb-1">{time || '--:--'}</span>
+      <span className="text-xl font-medium group-hover:text-white/80 transition-colors tracking-tight">{city}</span>
     </div>
   );
 }
@@ -71,7 +71,7 @@ export function Footer() {
   };
 
   return (
-    <footer className='relative sm:pt-20 pt-12 bg-white text-black border-t border-neutral-100 overflow-hidden' ref={container}>
+    <footer className='relative sm:pt-20 pt-12 bg-[#6b7b65] text-white border-t border-[#6b7b65] overflow-hidden' ref={container}>
       {/* Background Scrolling Watermark */}
       <div className="absolute inset-0 pointer-events-none opacity-100 select-none flex items-center overflow-hidden z-0">
         <motion.div 
@@ -80,7 +80,7 @@ export function Footer() {
           className="flex whitespace-nowrap"
         >
           {[...Array(6)].map((_, i) => (
-            <span key={i} className="text-[25vw] font-black tracking-tighter leading-none text-neutral-100 px-8" style={{ fontFamily: 'var(--font-sans)' }}>
+            <span key={i} className="text-[25vw] font-black tracking-tighter leading-none text-white/5 px-8" style={{ fontFamily: 'var(--font-sans)' }}>
               TESFA TRAVELS 
             </span>
           ))}
@@ -92,24 +92,24 @@ export function Footer() {
           <div className="flex-1 max-w-2xl">
             <h2 className='md:text-5xl text-4xl font-medium tracking-tight leading-tight mb-8' style={{ fontFamily: 'var(--font-sans)' }}>
               Flying is our business,<br />
-              <span className="font-light italic" style={{ fontFamily: 'var(--font-serif)' }}>service is our asset.</span>
+              <span className="font-light italic text-white/80" style={{ fontFamily: 'var(--font-serif)' }}>service is our asset.</span>
             </h2>
             <div className='pt-2 pb-12'>
-              <p className='md:text-xl text-lg mb-6 text-neutral-600'>Sign up for exclusive travel deals & updates*</p>
+              <p className='md:text-xl text-lg mb-6 text-white/80'>Sign up for exclusive travel deals & updates*</p>
               <form
                 onSubmit={handleNewsLetterData}
-                className='relative flex items-center border border-black rounded-none overflow-hidden h-14'
+                className='relative flex items-center border border-white/30 hover:border-white transition-colors rounded-none overflow-hidden h-14'
               >
                 <input
                   type='email'
                   name='newsletter_email'
                   required
-                  className='flex-1 border-none bg-transparent py-3 px-6 text-lg focus:outline-none placeholder:text-neutral-400'
+                  className='flex-1 border-none bg-transparent py-3 px-6 text-lg text-white focus:outline-none placeholder:text-white/50'
                   placeholder='Your Email *'
                 />
                 <button
                   type='submit'
-                  className='h-full px-8 bg-black text-white hover:bg-[#6b7b65] transition-colors duration-300 font-medium'
+                  className='h-full px-8 bg-white text-[#6b7b65] hover:bg-neutral-100 transition-colors duration-300 font-bold tracking-widest uppercase text-xs'
                 >
                   Join
                 </button>
@@ -119,62 +119,68 @@ export function Footer() {
 
           <div className='flex flex-wrap gap-12 md:gap-16 md:mt-4'>
             <div>
-              <h4 className='text-xs font-bold tracking-widest text-neutral-400 mb-6 uppercase'>Explore</h4>
+              <h4 className='text-xs font-bold tracking-widest text-white/50 mb-6 uppercase'>Explore</h4>
               <ul className='space-y-4'>
-                <li className='text-lg font-medium hover:text-[#6b7b65] transition-colors'>
+                <li className='text-lg font-medium hover:text-white/70 transition-colors'>
                   <Link href='/'>Home</Link>
                 </li>
-                <li className='text-lg font-medium hover:text-[#6b7b65] transition-colors'>
+                <li className='text-lg font-medium hover:text-white/70 transition-colors'>
                   <Link href='/destinations'>Destinations</Link>
                 </li>
-                <li className='text-lg font-medium hover:text-[#6b7b65] transition-colors'>
-                  <Link href='/bookings'>Bookings</Link>
+                <li className='text-lg font-medium hover:text-white/70 transition-colors'>
+                  <Link href='/destinations?tab=flights'>Book Flights</Link>
                 </li>
-                <li className='text-lg font-medium hover:text-[#6b7b65] transition-colors'>
+                <li className='text-lg font-medium hover:text-white/70 transition-colors'>
+                  <Link href='/partners'>Our Partners</Link>
+                </li>
+                <li className='text-lg font-medium hover:text-white/70 transition-colors'>
                   <Link href='/blog'>Travel Journal (Blog)</Link>
                 </li>
-                <li className='text-lg font-medium hover:text-[#6b7b65] transition-colors'>
-                  <Link href='/offers'>Exclusive Offers</Link>
+                <li className='text-lg font-medium hover:text-white/70 transition-colors'>
+                  <Link href='/offers'>Offers & Promotions</Link>
                 </li>
-                <li className='text-lg font-medium hover:text-[#6b7b65] transition-colors'>
+                <li className='text-lg font-medium hover:text-white/70 transition-colors'>
+                  <Link href='/branches'>Our Branches</Link>
+                </li>
+                <li className='text-lg font-medium hover:text-white/70 transition-colors'>
                   <Link href='/contact'>Contact</Link>
                 </li>
               </ul>
             </div>
             
             <div>
-              <h4 className='text-xs font-bold tracking-widest text-neutral-400 mb-6 uppercase'>Services</h4>
+              <h4 className='text-xs font-bold tracking-widest text-white/50 mb-6 uppercase'>Services</h4>
               <ul className='space-y-4'>
-                <li className='text-lg font-medium hover:text-[#6b7b65] transition-colors'>
+                <li className='text-lg font-medium hover:text-white/70 transition-colors'>
                   <Link href='/air'>Air Ticketing</Link>
                 </li>
-                <li className='text-lg font-medium hover:text-[#6b7b65] transition-colors'>
+                <li className='text-lg font-medium hover:text-white/70 transition-colors'>
                   <Link href='/hotel'>Hotels</Link>
                 </li>
-                <li className='text-lg font-medium hover:text-[#6b7b65] transition-colors'>
+                <li className='text-lg font-medium hover:text-white/70 transition-colors'>
                   <Link href='/visa'>Visas</Link>
                 </li>
-                <li className='text-lg font-medium hover:text-[#6b7b65] transition-colors'>
+                <li className='text-lg font-medium hover:text-white/70 transition-colors'>
                   <Link href='/corporate'>Corporate</Link>
                 </li>
               </ul>
             </div>
             <div>
-              <h4 className='text-xs font-bold tracking-widest text-neutral-400 mb-6 uppercase'>Social</h4>
+              <h4 className='text-xs font-bold tracking-widest text-white/50 mb-6 uppercase'>Social</h4>
               <ul className='space-y-6'>
-                <li className='text-lg font-medium hover:text-[#6b7b65] transition-colors'>
+                <li className='text-lg font-medium hover:text-white/70 transition-colors'>
                   <a href='#' target='_blank' rel='noreferrer noopener' className='flex items-center gap-3'>
                     <MessageCircle size={20} />
                     WhatsApp
                   </a>
                 </li>
-                <li className='text-lg font-medium hover:text-[#6b7b65] transition-colors'>
+                <li className='text-lg font-medium hover:text-white/70 transition-colors'>
                   <a href='#' target='_blank' rel='noreferrer noopener' className='flex items-center gap-3'>
                     <Facebook size={20} />
                     Facebook
                   </a>
                 </li>
-                <li className='text-lg font-medium hover:text-[#6b7b65] transition-colors'>
+                <li className='text-lg font-medium hover:text-white/70 transition-colors'>
                   <a href='#' target='_blank' rel='noreferrer noopener' className='flex items-center gap-3'>
                     <Instagram size={20} />
                     Instagram
@@ -186,9 +192,9 @@ export function Footer() {
         </div>
 
       {/* Global Hubs & Trust Signals */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mt-20 pt-16 border-t border-neutral-100">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mt-20 pt-16 border-t border-white/20">
           <div>
-            <h4 className='text-xs font-bold tracking-widest text-neutral-400 mb-10 uppercase'>Global Hubs</h4>
+            <h4 className='text-xs font-bold tracking-widest text-white/50 mb-10 uppercase'>Global Hubs</h4>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
               <GlobalClock city="Addis Ababa" timeZone="Africa/Addis_Ababa" />
               <GlobalClock city="Dubai" timeZone="Asia/Dubai" />
@@ -197,33 +203,33 @@ export function Footer() {
             </div>
           </div>
           <div>
-            <h4 className='text-xs font-bold tracking-widest text-neutral-400 mb-10 uppercase'>Accreditation & Trust</h4>
+            <h4 className='text-xs font-bold tracking-widest text-white/50 mb-10 uppercase'>Accreditation & Trust</h4>
             <div className="flex flex-wrap gap-8 items-center">
-              <div className="flex items-center gap-3 border border-neutral-200 px-4 py-3 rounded-none">
-                <ShieldCheck className="text-[#6b7b65]" size={20} />
+              <div className="flex items-center gap-3 border border-white/20 px-4 py-3 rounded-none bg-white/5 backdrop-blur-sm">
+                <ShieldCheck className="text-white" size={20} />
                 <span className="text-sm font-bold tracking-wide uppercase">IATA Accredited</span>
               </div>
-              <div className="flex items-center gap-3 border border-neutral-200 px-4 py-3 rounded-none">
-                <CreditCard className="text-[#6b7b65]" size={20} />
+              <div className="flex items-center gap-3 border border-white/20 px-4 py-3 rounded-none bg-white/5 backdrop-blur-sm">
+                <CreditCard className="text-white" size={20} />
                 <span className="text-sm font-bold tracking-wide uppercase">Secure Payments</span>
               </div>
-              <div className="flex items-center gap-3 border border-neutral-200 px-4 py-3 rounded-none">
-                <HeadphonesIcon className="text-[#6b7b65]" size={20} />
+              <div className="flex items-center gap-3 border border-white/20 px-4 py-3 rounded-none bg-white/5 backdrop-blur-sm">
+                <HeadphonesIcon className="text-white" size={20} />
                 <span className="text-sm font-bold tracking-wide uppercase">24/7 Global Support</span>
               </div>
             </div>
           </div>
         </div>
 
-        <div className='flex md:flex-row flex-col-reverse gap-6 justify-between py-8 text-sm'>
-          <span className='text-neutral-500 font-medium'>
+        <div className='flex md:flex-row flex-col-reverse gap-6 justify-between py-8 text-sm border-t border-white/10 mt-16 pt-8'>
+          <span className='text-white/60 font-medium'>
             &copy; {new Date().getFullYear()} Tesfa Travels. All Rights Reserved.
           </span>
           <div className="flex gap-8">
-            <Link href='/privacy' className='font-semibold hover:text-[#6b7b65] transition-colors'>
+            <Link href='/privacy' className='font-semibold text-white/80 hover:text-white transition-colors'>
               Privacy Policy
             </Link>
-            <Link href='/terms' className='font-semibold hover:text-[#6b7b65] transition-colors'>
+            <Link href='/terms' className='font-semibold text-white/80 hover:text-white transition-colors'>
               Terms of Service
             </Link>
           </div>

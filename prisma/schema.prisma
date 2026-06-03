@@ -65,11 +65,15 @@ model VisaApplication {
 model Campaign {
   id            String   @id @default(cuid())
   name          String
+  description   String   @default("")
+  image         String?
   discountCode  String   @unique
   isActive      Boolean  @default(true)
+  validUntil    DateTime?
   conversions   Int      @default(0)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  packages      Package[]
 }
 
 model BlogPost {
@@ -82,6 +86,7 @@ model BlogPost {
   authorName  String   @default("Tesfa Team")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  packages    Package[]
 }
 
 model Inquiry {
@@ -93,6 +98,9 @@ model Inquiry {
   service   String
   message   String
   status    String   @default("UNREAD") // UNREAD, READ, RESPONDED
+  type      String   @default("GENERAL") // QUICK_INQUIRY, CONTACT_US, BOOKING
+  packageId String?
+  package   Package? @relation(fields: [packageId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -107,6 +115,9 @@ model Package {
   capacity    Int?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  blogPosts   BlogPost[]
+  campaigns   Campaign[]
+  inquiries   Inquiry[]
 }
 
 model Offer {
@@ -117,6 +128,7 @@ model Offer {
   image       String
   isActive    Boolean  @default(true)
   validUntil  DateTime?
+  includedItems String[] @default([])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

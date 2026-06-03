@@ -6,6 +6,7 @@ export const dynamic = 'force-dynamic';
 export default async function ClientsCRMPage() {
   const inquiries = await prisma.inquiry.findMany({
     orderBy: { createdAt: 'desc' },
+    include: { package: true },
   });
 
   return <ClientsCRMClientPage initialInquiries={inquiries} />;

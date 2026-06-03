@@ -12,7 +12,7 @@ export function Header() {
   const navigationItems = [
     {
       label: 'Flights',
-      href: '/flights',
+      href: '/destinations?tab=flights',
       featuredTitle: 'Premium Flights',
       featuredSub: 'COMFORT + RELIABILITY',
       featuredImage: '/assets/pexels-planespotter-geneva-1877406873-36897685.jpg',
@@ -79,6 +79,17 @@ export function Header() {
         { label: 'Juba, South Sudan', desc: 'Atla bara Tumbra rd', href: '/branches' },
         { label: 'Addis Ababa, Ethiopia', desc: 'Dembel city centre', href: '/branches' },
         { label: 'Asmara, Eritrea', desc: 'kebabi Bar zili shida', href: '/branches' },
+      ],
+    },
+    {
+      label: 'Partners',
+      href: '/partners',
+      featuredTitle: 'Our Network',
+      featuredSub: 'GLOBAL AIRLINES',
+      featuredImage: '/assets/flight1.jpg',
+      subItems: [
+        { label: 'View All Partners', desc: 'Global airlines', href: '/partners' },
+        { label: 'Regional Partners', desc: 'East African connections', href: '/partners' },
       ],
     },
   ];

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Plane, MapPin, FileText, Briefcase, ArrowRight, ChevronDown, X, Shield, Clock, Search, Map, Navigation, Calendar, Plus, Minus } from 'lucide-react';
@@ -10,8 +10,9 @@ import Earth from '@/components/ui/globe';
 import useEmblaCarousel from 'embla-carousel-react';
 import AccordionGallery from '@/components/ui/accordion-gallery';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { Partners } from '@/components/sections/Partners';
 
-export default function HomeClient({ destinations }: { destinations: any[] }) {
+export default function HomeClient({ destinations, offers = [] }: { destinations: any[], offers?: any[] }) {
   const [emblaRef] = useEmblaCarousel({ align: 'start', dragFree: true });
   const [reviewsRef] = useEmblaCarousel({ align: 'start', dragFree: true });
   const aboutRef = useRef<HTMLElement>(null);
@@ -21,30 +22,49 @@ export default function HomeClient({ destinations }: { destinations: any[] }) {
   });
   const videoY = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
 
+  const [currentOfferIndex, setCurrentOfferIndex] = useState(0);
+  const [currentDestinationIndex, setCurrentDestinationIndex] = useState(0);
+
+  useEffect(() => {
+    if (!destinations || destinations.length === 0) return;
+    const destInterval = setInterval(() => {
+      setCurrentDestinationIndex((prev) => (prev + 1) % destinations.length);
+    }, 6000); // 6s to offset from offers
+    return () => clearInterval(destInterval);
+  }, [destinations]);
+
+  useEffect(() => {
+    if (!offers || offers.length === 0) return;
+    const interval = setInterval(() => {
+      setCurrentOfferIndex((prev) => (prev + 1) % offers.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [offers]);
+
   const services = [
     {
       title: 'Air Ticketing',
       description: 'Expert issuance of local and international flight tickets with major airlines.',
       icon: Plane,
-      image: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=500&h=400&fit=crop',
+      image: '/assets/air-ticketing.jpg',
     },
     {
       title: 'Visa Assistance',
       description: 'Comprehensive support for visa documentation and applications.',
       icon: FileText,
-      image: 'https://images.unsplash.com/photo-1526243741027-444d6d255f30?w=500&h=400&fit=crop',
+      image: '/assets/visa-assistance.jpg',
     },
     {
       title: 'Hotel Reservations',
       description: 'Global and local hotel bookings at competitive corporate rates.',
       icon: MapPin,
-      image: 'https://images.unsplash.com/photo-1584622181563-430f63602d4b?w=500&h=400&fit=crop',
+      image: '/assets/hotel-reservations.jpg',
     },
     {
       title: 'Corporate Travel',
       description: 'Tailored travel management for businesses and conferences.',
       icon: Briefcase,
-      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&h=400&fit=crop',
+      image: '/assets/corporate-travel.jpg',
     },
   ];
 
@@ -112,46 +132,77 @@ export default function HomeClient({ destinations }: { destinations: any[] }) {
         {/* Floating Cards Container - Bottom Left */}
         <div className="absolute bottom-8 left-8 z-20 hidden md:flex items-center gap-6">
           {/* Card 1: Destination Shortcut */}
-          <div className="bg-white p-4 rounded-none shadow-2xl flex items-center gap-6 w-[360px] relative">
-            <div className="relative w-[72px] h-[100px] bg-[#f4f2ea] rounded-none overflow-hidden flex-shrink-0">
-              <Image src="/assets/pexels-zakh-36720392.jpg" alt="Dubai" fill className="object-cover" />
+          {destinations && destinations.length > 0 && (
+            <div className="bg-white p-4 rounded-none shadow-2xl flex items-center gap-6 w-[360px] h-[140px] relative overflow-hidden">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentDestinationIndex}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.5 }}
+                  className="flex items-center gap-6 w-full"
+                >
+                  <div className="relative w-[72px] h-[100px] bg-[#f4f2ea] rounded-none overflow-hidden flex-shrink-0">
+                    <Image src={destinations[currentDestinationIndex].image || "/assets/placeholder.jpg"} alt={destinations[currentDestinationIndex].name} fill className="object-cover" />
+                  </div>
+                  <div className="flex-1 relative">
+                    <div className="mt-2">
+                      <span className="text-[8px] text-neutral-500 font-bold tracking-widest uppercase mb-1 block">Find your destination</span>
+                      <h3 className="text-slate-900 text-[18px] font-medium leading-tight mb-1 truncate" title={destinations[currentDestinationIndex].name}>
+                        {destinations[currentDestinationIndex].name}
+                      </h3>
+                      <span className="text-[9px] font-mono text-[#6b7b65] bg-[#6b7b65]/10 px-2 py-0.5 rounded-none font-bold uppercase inline-block mb-3 truncate max-w-[150px]">
+                        {destinations[currentDestinationIndex].price || 'Most Popular'}
+                      </span>
+                      <div className="w-full h-px bg-slate-200 mb-3"></div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-900 font-bold text-[11px] opacity-0">Hidden</span>
+                        <Link href={`/destinations/${destinations[currentDestinationIndex].id}`} className="bg-[#6b7b65] hover:bg-[#5a6a54] text-white text-[10px] font-bold tracking-widest uppercase px-3 py-1.5 rounded-none transition-colors">
+                          Explore
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
             </div>
-            <div className="flex-1 relative">
-              <div className="mt-2">
-                <span className="text-[8px] text-neutral-500 font-bold tracking-widest uppercase mb-1 block">Find your destination</span>
-                <h3 className="text-slate-900 text-[18px] font-medium leading-tight mb-1">Dubai</h3>
-                <span className="text-[9px] font-mono text-[#6b7b65] bg-[#6b7b65]/10 px-2 py-0.5 rounded-none font-bold uppercase inline-block mb-3">Most Popular</span>
-                <div className="w-full h-px bg-slate-200 mb-3"></div>
-                <div className="flex items-center justify-between">
-                  <Link href="/destinations/dubai" className="text-slate-700 hover:text-slate-900 text-[11px] flex items-center gap-1 font-medium">
-                    <span className="text-sm leading-none mb-0.5">&#x21aa;</span> Explore
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
+          )}
 
           {/* Card 2: Premium Package / Offer */}
-          <div className="bg-white p-4 rounded-none shadow-2xl flex items-center gap-6 w-[360px] relative">
-            <div className="relative w-[72px] h-[100px] bg-[#f4f2ea] rounded-none overflow-hidden flex-shrink-0">
-              <Image src="/assets/flight1.jpg" alt="Luxury Package" fill className="object-cover" />
+          {offers && offers.length > 0 && (
+            <div className="bg-white p-4 rounded-none shadow-2xl flex items-center gap-6 w-[360px] h-[140px] relative overflow-hidden">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentOfferIndex}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.5 }}
+                  className="flex items-center gap-6 w-full"
+                >
+                  <div className="relative w-[72px] h-[100px] bg-[#f4f2ea] rounded-none overflow-hidden flex-shrink-0">
+                    <Image src={offers[currentOfferIndex].image || "/assets/placeholder.jpg"} alt={offers[currentOfferIndex].title} fill className="object-cover" />
+                  </div>
+                  <div className="flex-1 relative">
+                    <div className="mt-2">
+                      <div className="text-[8px] text-[#6b7b65] font-mono uppercase tracking-widest mb-1">PREMIUM OFFER</div>
+                      <h4 className="text-slate-900 text-[14px] font-medium leading-tight mb-2 truncate" title={offers[currentOfferIndex].title}>
+                        {offers[currentOfferIndex].title}
+                      </h4>
+                      <div className="w-full h-px bg-slate-200 mb-3"></div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-900 font-bold text-[11px]">{offers[currentOfferIndex].price}</span>
+                        <Link href={`/offers/${offers[currentOfferIndex].id}`} className="bg-[#6b7b65] hover:bg-[#5a6a54] text-white text-[10px] font-bold tracking-widest uppercase px-3 py-1.5 rounded-none transition-colors">
+                          View Deal
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
             </div>
-            <div className="flex-1 relative">
-              <div className="mt-2">
-                <div className="text-[8px] text-[#6b7b65] font-mono uppercase tracking-widest mb-1">PREMIUM PACKAGE</div>
-                <h4 className="text-slate-900 text-[15px] font-medium leading-tight mb-2">Dubai Luxury Getaway<sup className="text-[10px] ml-0.5">Hx</sup></h4>
-                <div className="w-full h-px bg-slate-200 mb-3"></div>
-                <div className="flex items-center justify-between">
-                  <Link href="/offers" className="text-slate-700 hover:text-slate-900 text-[11px] flex items-center gap-1 font-medium">
-                    <span className="text-sm leading-none mb-0.5">&#x21aa;</span> Learn more
-                  </Link>
-                  <Link href="/bookings" className="bg-[#6b7b65] hover:bg-[#5a6a54] text-white text-[10px] font-bold tracking-widest uppercase px-3 py-1.5 rounded-none transition-colors">
-                    Get started
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
       </section>
 
@@ -466,32 +517,6 @@ export default function HomeClient({ destinations }: { destinations: any[] }) {
         </div>
       </section>
 
-      {/* Our Partners */}
-      <section className="py-20 px-6 bg-white overflow-hidden border-t border-neutral-100">
-        <div className="mb-12 text-center">
-          <span className="text-[#6b7b65] font-bold tracking-[0.2em] text-xs uppercase block">Our Partners</span>
-        </div>
-        <div className="relative flex overflow-x-hidden group">
-          <motion.div 
-            className="flex items-center gap-16 md:gap-32 whitespace-nowrap"
-            animate={{ x: ["0%", "-50%"] }}
-            transition={{ ease: "linear", duration: 20, repeat: Infinity }}
-          >
-            {[...Array(2)].map((_, i) => (
-              <React.Fragment key={i}>
-                <span className="text-3xl md:text-5xl font-serif tracking-[0.2em] uppercase text-neutral-300 hover:text-[#6b7b65] transition-colors cursor-default">Emirates</span>
-                <span className="text-3xl md:text-5xl font-serif tracking-[0.2em] uppercase text-neutral-300 hover:text-[#6b7b65] transition-colors cursor-default">Qatar</span>
-                <span className="text-3xl md:text-5xl font-serif tracking-[0.2em] uppercase text-neutral-300 hover:text-[#6b7b65] transition-colors cursor-default">Ethiopian</span>
-                <span className="text-3xl md:text-5xl font-serif tracking-[0.2em] uppercase text-neutral-300 hover:text-[#6b7b65] transition-colors cursor-default">Turkish</span>
-                <span className="text-3xl md:text-5xl font-serif tracking-[0.2em] uppercase text-neutral-300 hover:text-[#6b7b65] transition-colors cursor-default">Marriott</span>
-                <span className="text-3xl md:text-5xl font-serif tracking-[0.2em] uppercase text-neutral-300 hover:text-[#6b7b65] transition-colors cursor-default">Hilton</span>
-              </React.Fragment>
-            ))}
-          </motion.div>
-          <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white to-transparent pointer-events-none z-10"></div>
-          <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-white to-transparent pointer-events-none z-10"></div>
-        </div>
-      </section>
 
       {/* Client Reviews */}
       <section className="py-32 px-6 bg-[#fbfbfb] border-t border-neutral-100 overflow-hidden">
@@ -537,6 +562,7 @@ export default function HomeClient({ destinations }: { destinations: any[] }) {
         </div>
       </section>
 
+      <Partners />
       <Footer />
     </div>
   );

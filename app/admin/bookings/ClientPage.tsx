@@ -9,11 +9,29 @@ export default function ClientsCRMClientPage({ initialInquiries }: { initialInqu
   const [activeTab, setActiveTab] = useState('messages');
   const [activeMessage, setActiveMessage] = useState<string | null>(initialInquiries.length > 0 ? initialInquiries[0].id : null);
 
-  const clients = [
-    { id: '1', initials: 'JM', name: 'John Mbugua', email: 'john@email.com', status: 'Active', volume: 5, revenue: 'KSh 245k' },
-    { id: '2', initials: 'MK', name: 'Mary Kipchoge', email: 'mary@email.com', status: 'Offline', volume: 3, revenue: 'KSh 128k' },
-    { id: '3', initials: 'AH', name: 'Ahmed Hassan', email: 'ahmed@email.com', status: 'Active', volume: 8, revenue: 'KSh 568k' },
-  ];
+  // Dynamically compute unique customers from inquiries
+  const uniqueCustomersMap = new Map();
+  initialInquiries.forEach(inq => {
+    if (!uniqueCustomersMap.has(inq.email)) {
+      uniqueCustomersMap.set(inq.email, {
+        id: inq.id,
+        initials: (inq.firstName.charAt(0) + inq.lastName.charAt(0)).toUpperCase(),
+        name: `${inq.firstName} ${inq.lastName}`,
+        email: inq.email,
+        status: 'Active',
+        volume: 1,
+        latestActivity: new Date(inq.createdAt).toLocaleDateString(),
+      });
+    } else {
+      const existing = uniqueCustomersMap.get(inq.email);
+      existing.volume += 1;
+      const inqDate = new Date(inq.createdAt);
+      if (inqDate > new Date(existing.latestActivity)) {
+        existing.latestActivity = inqDate.toLocaleDateString();
+      }
+    }
+  });
+  const clients = Array.from(uniqueCustomersMap.values());
 
   const currentMsg = initialInquiries.find(m => m.id === activeMessage) || initialInquiries[0];
 
@@ -79,8 +97,8 @@ export default function ClientsCRMClientPage({ initialInquiries }: { initialInqu
               <tr className="bg-neutral-50 border-b border-neutral-200">
                 <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-500">Client Profile</th>
                 <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-500">Status</th>
-                <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-500">Volume</th>
-                <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-500">Revenue</th>
+                <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-500">Inquiries (Vol)</th>
+                <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-500">Latest Activity</th>
                 <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-500 text-right">Actions</th>
               </tr>
             </thead>
@@ -110,7 +128,7 @@ export default function ClientsCRMClientPage({ initialInquiries }: { initialInqu
                     <span className="text-sm font-bold text-[#111111]">{client.volume}</span>
                   </td>
                   <td className="px-10 py-6">
-                    <span className="text-sm font-bold text-[#111111]">{client.revenue}</span>
+                    <span className="text-sm font-bold text-neutral-500">{client.latestActivity}</span>
                   </td>
                   <td className="px-10 py-6 text-right">
                     <button className="p-2 hover:bg-neutral-100 text-neutral-400 hover:text-[#111111] transition-colors">
@@ -119,6 +137,48 @@ export default function ClientsCRMClientPage({ initialInquiries }: { initialInqu
                   </td>
                 </tr>
               ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {activeTab === 'tickets' && (
+        <div className="bg-white border border-neutral-200 shadow-xl overflow-hidden">
+          <table className="w-full text-left">
+            <thead>
+              <tr className="bg-neutral-50 border-b border-neutral-200">
+                <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-500">Product / Service</th>
+                <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-500">Customer</th>
+                <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-500">Type</th>
+                <th className="px-10 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-500">Date</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-neutral-100">
+              {initialInquiries.map((inq) => (
+                <tr key={inq.id} className="group hover:bg-[#fafafa] transition-colors">
+                  <td className="px-10 py-6">
+                    <span className="text-sm font-bold text-[#111111]">
+                      {inq.package?.name || inq.service}
+                    </span>
+                  </td>
+                  <td className="px-10 py-6">
+                    <span className="text-sm text-neutral-600">{inq.firstName} {inq.lastName}</span>
+                  </td>
+                  <td className="px-10 py-6">
+                    <span className="inline-flex items-center gap-2 text-[9px] font-bold uppercase tracking-widest px-3 py-1 bg-neutral-50 border border-neutral-200 text-[#6b7b65]">
+                      {inq.type}
+                    </span>
+                  </td>
+                  <td className="px-10 py-6">
+                    <span className="text-sm font-bold text-neutral-500">{new Date(inq.createdAt).toLocaleDateString()}</span>
+                  </td>
+                </tr>
+              ))}
+              {initialInquiries.length === 0 && (
+                <tr>
+                  <td colSpan={4} className="px-10 py-10 text-center text-neutral-400 font-light italic">No product inquiries yet.</td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
@@ -170,7 +230,12 @@ export default function ClientsCRMClientPage({ initialInquiries }: { initialInqu
                           {new Date(inq.createdAt).toLocaleDateString()}
                         </span>
                       </div>
-                      <p className={`text-xs mb-2 ${inq.status === 'UNREAD' ? 'text-[#111111] font-bold' : 'text-neutral-500'}`}>Inquiry: {inq.service}</p>
+                      <p className={`text-xs mb-2 flex items-center gap-2 ${inq.status === 'UNREAD' ? 'text-[#111111] font-bold' : 'text-neutral-500'}`}>
+                        {inq.package?.name || inq.service}
+                        <span className="px-2 py-0.5 bg-neutral-100 text-[8px] tracking-widest uppercase rounded-sm border border-neutral-200 text-neutral-500">
+                          {inq.type}
+                        </span>
+                      </p>
                       <p className="text-[10px] text-neutral-400 font-medium truncate leading-relaxed">
                         {inq.message}
                       </p>

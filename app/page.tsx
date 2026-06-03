@@ -7,5 +7,10 @@ export default async function Home() {
     orderBy: { createdAt: 'asc' },
   });
 
-  return <HomeClient destinations={packages} />;
+  const offers = await prisma.offer.findMany({
+    where: { isActive: true },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  return <HomeClient destinations={packages} offers={offers} />;
 }

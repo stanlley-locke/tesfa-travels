@@ -7,19 +7,53 @@ import { ArrowRight, X, Calendar, CheckCircle2, Send } from 'lucide-react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import Earth from '@/components/ui/globe';
+import { useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 import { Package } from '@prisma/client';
+import { FlightDeals } from './FlightDeals';
+
+import { submitInquiry } from '@/app/actions/inquiries';
+import Link from 'next/link';
 
 export default function DestinationsClientPage({ destinations }: { destinations: Package[] }) {
-  const [selectedDest, setSelectedDest] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+  const initialTab = searchParams.get('tab') === 'flights' ? 'flights' : 'packages';
+  const [activeTab, setActiveTab] = useState<'packages' | 'flights'>(initialTab);
+  const [selectedDest, setSelectedDest] = useState<Package | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    message: '',
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (searchParams.get('tab') === 'flights') {
+      setActiveTab('flights');
+    }
+  }, [searchParams]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setSelectedDest(null);
-    }, 3000);
+    if (!selectedDest) return;
+    
+    const res = await submitInquiry({
+      ...formData,
+      service: selectedDest.name,
+      type: 'QUICK_INQUIRY',
+      packageId: selectedDest.id,
+    });
+    
+    if (res.success) {
+      setSubmitted(true);
+      setTimeout(() => {
+        setSubmitted(false);
+        setSelectedDest(null);
+        setFormData({ firstName: '', lastName: '', email: '', phone: '', message: '' });
+      }, 3000);
+    }
   };
 
   return (
@@ -55,8 +89,30 @@ export default function DestinationsClientPage({ destinations }: { destinations:
         </div>
       </section>
 
-      {/* Grid Section */}
-      <section className="relative py-24 bg-white overflow-hidden text-[#1a1a1a]">
+      {/* Tabs */}
+      <div className="flex justify-center -mt-8 relative z-20">
+        <div className="bg-white p-2 shadow-2xl flex border border-neutral-100">
+          <button 
+            onClick={() => setActiveTab('packages')}
+            className={`px-12 py-5 text-xs font-bold uppercase tracking-[0.2em] transition-colors ${
+              activeTab === 'packages' ? 'bg-[#1a1a1a] text-white' : 'bg-transparent text-neutral-400 hover:text-black hover:bg-neutral-50'
+            }`}
+          >
+            Common Destinations
+          </button>
+          <button 
+            onClick={() => setActiveTab('flights')}
+            className={`px-12 py-5 text-xs font-bold uppercase tracking-[0.2em] transition-colors ${
+              activeTab === 'flights' ? 'bg-[#1a1a1a] text-white' : 'bg-transparent text-neutral-400 hover:text-black hover:bg-neutral-50'
+            }`}
+          >
+            Flight Routes
+          </button>
+        </div>
+      </div>
+
+      {activeTab === 'packages' ? (
+        <section className="relative py-24 bg-white overflow-hidden text-[#1a1a1a]">
         <div className='absolute top-0 left-0 z-0 h-full w-full bg-[radial-gradient(#83838352_1px,#ececec_1px)] bg-[size:20px_20px]'></div>
         <Earth
           mapBrightness={6}
@@ -98,22 +154,39 @@ export default function DestinationsClientPage({ destinations }: { destinations:
                       <span className="bg-white text-black font-mono text-[10px] tracking-widest font-bold px-4 py-2 rounded-full">
                         {dest.price}
                       </span>
-                      <button 
-                        onClick={(e) => { e.stopPropagation(); setSelectedDest(dest.name); }}
-                        className="bg-[#6b7b65] hover:bg-[#5a6a54] text-white px-6 py-2.5 rounded-full text-[10px] font-bold tracking-widest uppercase transition-colors flex items-center gap-2"
-                      >
-                        Inquire <ArrowRight size={14}/>
-                      </button>
                     </div>
                   </div>
                 </figure>
-                <div className="mt-8 text-center px-4 pb-4">
+                <div className="mt-8 text-center px-4 pb-4 w-full">
                   <div className="flex justify-center gap-4 text-[#6b7b65] font-mono text-[10px] tracking-widest uppercase mb-4">
                     <span className="flex items-center gap-1.5"><Calendar size={12}/> {dest.capacity ? dest.capacity + ' PAX Max' : 'Flexible'}</span>
                   </div>
                   <h3 className="text-3xl font-medium text-[#1a1a1a] mb-2" style={{ fontFamily: 'var(--font-sans)' }}>{dest.name}</h3>
                   <p className="text-[#6b7b65] font-light text-sm italic mb-4">{dest.status}</p>
-                  <p className="text-neutral-600 font-light text-base">{dest.description}</p>
+                  <p className="text-neutral-600 font-light text-base mb-6">{dest.description}</p>
+                  
+                  <div className="flex flex-col gap-3 w-full">
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); setSelectedDest(dest); }}
+                      className="bg-[#111111] hover:bg-[#6b7b65] text-white px-6 py-3 text-[10px] font-bold tracking-widest uppercase transition-colors w-full"
+                    >
+                      Quick Inquire
+                    </button>
+                    <div className="grid grid-cols-2 gap-3 w-full">
+                      <Link 
+                        href={`/destinations/${dest.id}`}
+                        className="bg-transparent border border-neutral-200 hover:border-black text-[#111111] px-4 py-3 text-[10px] font-bold tracking-widest uppercase transition-colors w-full text-center"
+                      >
+                        View Details
+                      </Link>
+                      <Link 
+                        href={`/contact?subject=Inquiry about: ${dest.name}`}
+                        className="bg-transparent border border-neutral-200 hover:border-black text-[#111111] px-4 py-3 text-[10px] font-bold tracking-widest uppercase transition-colors w-full text-center"
+                      >
+                        Contact Us
+                      </Link>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
@@ -126,6 +199,9 @@ export default function DestinationsClientPage({ destinations }: { destinations:
           )}
         </div>
       </section>
+      ) : (
+        <FlightDeals />
+      )}
 
       {/* Dynamic Inquiry Modal */}
       <AnimatePresence>
@@ -157,14 +233,14 @@ export default function DestinationsClientPage({ destinations }: { destinations:
                     </div>
                     <h3 className="text-2xl font-medium text-[#1a1a1a] mb-2">Inquiry Sent!</h3>
                     <p className="text-neutral-500 font-light text-sm">
-                      Our specialist for <span className="font-medium">{selectedDest}</span> will contact you shortly.
+                      Our specialist for <span className="font-medium">{selectedDest.name}</span> will contact you shortly.
                     </p>
                   </div>
                 ) : (
                   <>
-                    <span className="text-[#6b7b65] font-bold tracking-[0.2em] text-[10px] uppercase mb-4 block">Request Details</span>
+                    <span className="text-[#6b7b65] font-bold tracking-[0.2em] text-[10px] uppercase mb-4 block">Quick Inquiry</span>
                     <h2 className="text-3xl font-medium text-[#1a1a1a] mb-2" style={{ fontFamily: 'var(--font-sans)' }}>
-                      {selectedDest}
+                      {selectedDest.name}
                     </h2>
                     <p className="text-neutral-500 font-light text-sm mb-8">
                       Fill out the form below to get a customized itinerary and pricing for this destination.
@@ -174,33 +250,28 @@ export default function DestinationsClientPage({ destinations }: { destinations:
                       <div className="grid grid-cols-2 gap-6">
                         <div className="space-y-2">
                           <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-neutral-400">First Name</label>
-                          <input type="text" required className="w-full bg-transparent border-b border-neutral-300 py-2 text-sm text-[#111111] focus:outline-none focus:border-[#6b7b65]" />
+                          <input type="text" required value={formData.firstName} onChange={e => setFormData({...formData, firstName: e.target.value})} className="w-full bg-transparent border-b border-neutral-300 py-2 text-sm text-[#111111] focus:outline-none focus:border-[#6b7b65]" />
                         </div>
                         <div className="space-y-2">
                           <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-neutral-400">Last Name</label>
-                          <input type="text" required className="w-full bg-transparent border-b border-neutral-300 py-2 text-sm text-[#111111] focus:outline-none focus:border-[#6b7b65]" />
+                          <input type="text" required value={formData.lastName} onChange={e => setFormData({...formData, lastName: e.target.value})} className="w-full bg-transparent border-b border-neutral-300 py-2 text-sm text-[#111111] focus:outline-none focus:border-[#6b7b65]" />
                         </div>
-                      </div>
-
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-neutral-400">Email Address</label>
-                        <input type="email" required className="w-full bg-transparent border-b border-neutral-300 py-2 text-sm text-[#111111] focus:outline-none focus:border-[#6b7b65]" />
                       </div>
 
                       <div className="grid grid-cols-2 gap-6">
                         <div className="space-y-2">
-                          <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-neutral-400">Travel Date</label>
-                          <input type="date" required className="w-full bg-transparent border-b border-neutral-300 py-2 text-sm text-[#111111] focus:outline-none focus:border-[#6b7b65]" />
+                          <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-neutral-400">Email Address</label>
+                          <input type="email" required value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full bg-transparent border-b border-neutral-300 py-2 text-sm text-[#111111] focus:outline-none focus:border-[#6b7b65]" />
                         </div>
                         <div className="space-y-2">
-                          <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-neutral-400">Travelers</label>
-                          <select required className="w-full bg-transparent border-b border-neutral-300 py-2 text-sm text-[#111111] focus:outline-none focus:border-[#6b7b65]">
-                            <option>1 Person</option>
-                            <option>2 People</option>
-                            <option>3-5 People</option>
-                            <option>Group (6+)</option>
-                          </select>
+                          <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-neutral-400">Phone</label>
+                          <input type="tel" required value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full bg-transparent border-b border-neutral-300 py-2 text-sm text-[#111111] focus:outline-none focus:border-[#6b7b65]" />
                         </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-neutral-400">Message / Dates / Travelers</label>
+                        <textarea required rows={3} value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})} className="w-full bg-transparent border-b border-neutral-300 py-2 text-sm text-[#111111] focus:outline-none focus:border-[#6b7b65] resize-none"></textarea>
                       </div>
 
                       <button type="submit" className="w-full bg-[#111111] hover:bg-[#6b7b65] text-white py-4 mt-4 flex items-center justify-center gap-3 text-xs font-bold tracking-[0.2em] uppercase transition-all">

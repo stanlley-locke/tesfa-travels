@@ -10,6 +10,8 @@ export async function submitInquiry(data: {
   phone: string;
   service: string;
   message: string;
+  type?: string;
+  packageId?: string;
 }) {
   try {
     const inquiry = await prisma.inquiry.create({
@@ -20,6 +22,8 @@ export async function submitInquiry(data: {
         phone: data.phone,
         service: data.service,
         message: data.message,
+        type: data.type || 'GENERAL',
+        packageId: data.packageId,
       },
     });
     
