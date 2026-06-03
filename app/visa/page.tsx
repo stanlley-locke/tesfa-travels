@@ -15,8 +15,9 @@ export const metadata: Metadata = {
     url: 'https://tesfatravels.com/visa',
     images: [{ url: 'https://tesfatravels.com/assets/og-image.png', width: 1200, height: 630 }],
   },
-};
+}; 
 
+export default function VisaPage() {
   const visas = [
     { country: 'Ethiopia', processing: '3-5 days', type: 'Regional' },
     { country: 'South Sudan', processing: '5-7 days', type: 'Regional' },
