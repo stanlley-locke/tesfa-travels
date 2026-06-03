@@ -1,8 +1,21 @@
+import type { Metadata } from 'next';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Briefcase, BarChart3, Users, TrendingUp, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+
+export const metadata: Metadata = {
+  title: 'Corporate Travel Management | B2B Solutions - Tesfa Travels',
+  description: 'Comprehensive corporate travel management for businesses in Nairobi and East Africa. Dedicated account managers, volume discounts, MICE planning, and 24/7 support.',
+  alternates: { canonical: 'https://tesfatravels.com/corporate' },
+  openGraph: {
+    title: 'Corporate Travel Solutions | Tesfa Travels',
+    description: 'End-to-end corporate travel management, MICE planning, and team retreats for East African businesses.',
+    url: 'https://tesfatravels.com/corporate',
+    images: [{ url: 'https://tesfatravels.com/assets/og-image.png', width: 1200, height: 630 }],
+  },
+};
 
 export default function CorporatePage() {
   const corporateServices = [

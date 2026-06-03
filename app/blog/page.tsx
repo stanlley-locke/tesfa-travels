@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import prisma from '@/lib/prisma';
@@ -6,6 +7,18 @@ import Image from 'next/image';
 import { ArrowRight, BookOpen } from 'lucide-react';
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title: 'Travel Blog | Tips, Guides & Stories - Tesfa Travels',
+  description: 'Read Tesfa Travels\u2019 travel blog for expert tips, destination guides, and inspiring stories from East Africa and around the world.',
+  alternates: { canonical: 'https://tesfatravels.com/blog' },
+  openGraph: {
+    title: 'Travel Blog | Tesfa Travels',
+    description: 'Expert travel guides and stories from the Tesfa Travels team.',
+    url: 'https://tesfatravels.com/blog',
+    images: [{ url: 'https://tesfatravels.com/assets/og-image.png', width: 1200, height: 630 }],
+  },
+};
 
 export default async function BlogPage() {
   const posts = await prisma.blogPost.findMany({

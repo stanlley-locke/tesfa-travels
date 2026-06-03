@@ -1,10 +1,22 @@
+import type { Metadata } from 'next';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { FileText, CheckCircle2, Clock, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-export default function VisaPage() {
+export const metadata: Metadata = {
+  title: 'Visa Services | Regional & International Visa Assistance - Tesfa Travels',
+  description: 'Expert visa processing for regional and international destinations. Tesfa Travels handles applications for Ethiopia, South Sudan, UAE, UK, and more from Nairobi, Kenya.',
+  alternates: { canonical: 'https://tesfatravels.com/visa' },
+  openGraph: {
+    title: 'Visa Assistance Services | Tesfa Travels Nairobi',
+    description: 'Fast, reliable visa processing for East African and international destinations.',
+    url: 'https://tesfatravels.com/visa',
+    images: [{ url: 'https://tesfatravels.com/assets/og-image.png', width: 1200, height: 630 }],
+  },
+};
+
   const visas = [
     { country: 'Ethiopia', processing: '3-5 days', type: 'Regional' },
     { country: 'South Sudan', processing: '5-7 days', type: 'Regional' },

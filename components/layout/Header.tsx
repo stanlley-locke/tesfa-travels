@@ -141,7 +141,7 @@ export function Header() {
               <div className="h-full aspect-square flex-shrink-0 overflow-hidden">
                 <img src="/assets/logo.png" alt="Tesfa Travels Logo" className="h-full w-full object-cover" />
               </div>
-              <span className="text-white font-medium tracking-wide text-xl hidden sm:block" style={{ fontFamily: 'var(--font-serif)' }}>Tesfa Travels</span>
+              <span className="text-white font-medium tracking-wide text-base md:text-xl" style={{ fontFamily: 'var(--font-serif)' }}>Tesfa Travels</span>
             </Link>
 
           {/* Desktop Navigation Links */}

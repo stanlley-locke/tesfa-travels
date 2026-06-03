@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import prisma from '@/lib/prisma';
@@ -6,6 +7,18 @@ import { ArrowRight, Tag } from 'lucide-react';
 import Image from 'next/image';
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title: 'Special Offers | Exclusive Travel Deals - Tesfa Travels',
+  description: 'Browse exclusive travel deals and limited-time offers from Tesfa Travels. Discounted flights, hotel packages, and tour deals for East Africa and beyond.',
+  alternates: { canonical: 'https://tesfatravels.com/offers' },
+  openGraph: {
+    title: 'Special Travel Offers | Tesfa Travels',
+    description: 'Limited-time travel deals, discounted flights, and exclusive packages.',
+    url: 'https://tesfatravels.com/offers',
+    images: [{ url: 'https://tesfatravels.com/assets/og-image.png', width: 1200, height: 630 }],
+  },
+};
 
 export default async function OffersPage() {
   const offers = await prisma.offer.findMany({

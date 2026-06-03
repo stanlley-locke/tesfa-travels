@@ -91,6 +91,8 @@ export default function HomeClient({ destinations, offers = [] }: { destinations
       <section className="relative min-h-[100dvh] flex flex-col items-center justify-center pt-24 pb-8 overflow-x-hidden overflow-y-auto bg-[#111111] md:[clip-path:inset(0)]">
         {/* Background Image / Video - Constant/Fixed */}
         <div className="absolute md:fixed inset-0 z-0 bg-slate-900">
+          {/* VIDEO TEMPORARILY COMMENTED OUT */}
+          {/*
           <video
             autoPlay
             loop
@@ -100,6 +102,15 @@ export default function HomeClient({ destinations, offers = [] }: { destinations
           >
             <source src="/assets/12449638_3840_2160_120fps.mp4" type="video/mp4" />
           </video>
+          */}
+          {/* Static hero image (temporary replacement) */}
+          <Image
+            src="/assets/sacha-verheij-5bwgW8_9OPs-unsplash.jpg"
+            alt="Tesfa Travels Hero"
+            fill
+            className="object-cover object-center"
+            priority
+          />
           {/* A gradient overlay fading smoothly into the white globe section */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-[#111111]"></div>
         </div>
