@@ -52,8 +52,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: `${siteUrl}/assets/logo.png`,
-        width: 1200,
-        height: 630,
+        width: 96,
+        height: 96,
         alt: 'Tesfa Travel & Tour - IATA Accredited Travel Agency',
       },
     ],
