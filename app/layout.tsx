@@ -15,7 +15,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tesfatravels.com';
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'Tesfa Travel & Tour | IATA Accredited Travel Agency in Nairobi',
+    default: 'Tesfa Travel & Tour | IATA Travel Agency in Nairobi',
     template: '%s | Tesfa Travels',
   },
   description: 'Tesfa Travel & Tour is a leading IATA-accredited travel agency in Nairobi, Kenya. Book flights, arrange visas, hotel reservations, corporate travel and tour packages across East Africa and worldwide.',
