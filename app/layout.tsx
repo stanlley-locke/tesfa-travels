@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     siteName: 'Tesfa Travels',
     images: [
       {
-        url: `${siteUrl}/assets/og-image.png`,
+        url: `${siteUrl}/assets/logo.png`,
         width: 1200,
         height: 630,
         alt: 'Tesfa Travel & Tour - IATA Accredited Travel Agency',
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
     description: 'Book flights, visas, hotels & tour packages across East Africa and worldwide.',
     site: '@tesfatravels',
     creator: '@tesfatravels',
-    images: [`${siteUrl}/assets/og-image.png`],
+    images: [`${siteUrl}/assets/logo.png`],
   },
   robots: {
     index: true,
